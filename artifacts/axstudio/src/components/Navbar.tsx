@@ -44,9 +44,12 @@ export function Navbar() {
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         <Link href="/">
-          <span className={`text-2xl font-bold font-serif tracking-tighter ${isScrolled ? "text-foreground" : "text-white"}`}>
-            AXE STUDIO
-          </span>
+          <img
+            src="/logo.png"
+            alt="AXE STUDIO"
+            className="h-16 w-auto object-contain"
+            style={{ maxWidth: 140 }}
+          />
         </Link>
 
         {/* Desktop Nav */}
