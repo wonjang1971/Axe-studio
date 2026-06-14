@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Users, Dice5, Swords, BookOpen, GraduationCap, Globe } from "lucide-react";
+import { Users, Dice5, Swords, BookOpen, GraduationCap, Globe, Star, Scroll } from "lucide-react";
 
 export function GameSection() {
   const features = [
@@ -32,6 +32,16 @@ export function GameSection() {
       icon: <Globe className="w-7 h-7 text-primary" />,
       title: "글로벌 멀티플레이",
       description: "전 세계 친구들과 실시간으로 승경도를 즐겨보세요!"
+    },
+    {
+      icon: <Star className="w-7 h-7 text-primary" />,
+      title: "캐릭터 성장 시스템",
+      description: "나만의 관리로 성장하는 개성 있는 캐릭터 커스터마이징."
+    },
+    {
+      icon: <Scroll className="w-7 h-7 text-primary" />,
+      title: "승경도 원작 스토리",
+      description: "드라마와 연동된 원작 스토리라인으로 더 깊은 세계관 체험."
     }
   ];
 
@@ -56,29 +66,29 @@ export function GameSection() {
           </motion.div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Feature grid — 3×2 */}
+        <div className="grid lg:grid-cols-2 gap-12 items-stretch">
+          {/* Feature grid — 4×2 */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="grid sm:grid-cols-2 gap-5"
+            className="grid grid-cols-2 gap-4 content-start"
           >
             {features.map((feature, i) => (
               <div
                 key={i}
-                className="bg-background p-5 rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow"
+                className="bg-background p-5 rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow flex flex-col"
               >
-                <div className="mb-3 bg-primary/10 w-12 h-12 rounded-xl flex items-center justify-center">
+                <div className="mb-3 bg-primary/10 w-11 h-11 rounded-xl flex items-center justify-center shrink-0">
                   {feature.icon}
                 </div>
-                <h4 className="text-base font-bold text-foreground mb-1">{feature.title}</h4>
+                <h4 className="text-sm font-bold text-foreground mb-1 leading-snug">{feature.title}</h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </motion.div>
 
-          {/* Game image */}
+          {/* Game image — stretches to match card grid height */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -87,10 +97,10 @@ export function GameSection() {
           >
             <img
               src="/game-bg.png"
-              alt="승경도 모바일게임 UI"
-              className="w-full object-cover"
+              alt="승경도 모바일게임 포스터"
+              className="w-full h-full object-cover object-top"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end p-6 text-white">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-6 text-white">
               <span className="text-primary font-bold tracking-wider mb-1 text-sm">개발 진행중</span>
               <h3 className="text-xl font-serif font-bold mb-2">승경아 놀자: 모바일 에디션</h3>
               <div className="flex flex-col gap-1">
