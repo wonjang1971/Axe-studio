@@ -59,7 +59,6 @@ export function Hero() {
           >
             조선시대 실제 관직 체험 놀이 <strong style={{ color: "#f4d28d" }}>승경도</strong>를 원작으로 한
             온 가족 역사 판타지 타임슬립 드라마.
-            <br className="hidden md:block" />
             이순신 장군의 난중일기에도 기록된 전통 놀이가, 아이들의 모험으로 다시 깨어납니다.
           </p>
 

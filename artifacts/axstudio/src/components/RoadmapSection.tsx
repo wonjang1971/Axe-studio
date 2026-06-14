@@ -43,8 +43,7 @@ export function RoadmapSection() {
         >
           <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6">IP ROADMAP</h2>
           <p className="text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-            단일 콘텐츠를 넘어 입체적인 세계관으로 확장되는<br/>
-            승경아 놀자의 미래를 소개합니다.
+            단일 콘텐츠를 넘어 입체적인 세계관으로 확장되는 승경아 놀자의 미래를 소개합니다.
           </p>
         </motion.div>
 

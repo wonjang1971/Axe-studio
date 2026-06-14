@@ -40,9 +40,7 @@ export function CompanySection() {
                   AXE STUDIO
                 </h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  우리는 가장 한국적인 이야기를<br />
-                  가장 현대적인 방식으로 풀어내는<br />
-                  크리에이티브 프로덕션입니다.
+                  우리는 가장 한국적인 이야기를 가장 현대적인 방식으로 풀어내는 크리에이티브 프로덕션입니다.
                 </p>
               </div>
 

@@ -1,0 +1,124 @@
+모바일 UI / 폰트 / 카카오톡 링크 썸네일 수정 요청
+
+1. 폰트 상업용 안정화
+현재 한글 문장 줄바꿈과 자간이 불안정합니다.
+상업용으로 안정적인 무료 폰트로 통일해주세요.
+
+권장 폰트:
+- 제목: Pretendard 또는 Noto Serif KR
+- 본문: Pretendard
+- 강조/고전 느낌 제목: Noto Serif KR
+
+Google Fonts 또는 CDN 사용 시:
+Noto Serif KR, Noto Sans KR 적용.
+가능하면 Pretendard CDN도 적용.
+
+font-family 예시:
+body {
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+}
+
+.serif-title {
+  font-family: "Noto Serif KR", serif;
+}
+
+2. 모바일 문장 배열 깨짐 수정
+모바일에서 제목과 본문이 어색하게 끊어지지 않도록 수정해주세요.
+
+- 강제 <br> 태그 제거
+- 제목 max-width 통일
+- word-break: keep-all 적용
+- overflow-wrap: break-word 적용
+- line-height 통일
+- letter-spacing 과도한 값 제거
+- 모바일 제목은 34~42px 이하
+- 본문은 15~17px
+- 텍스트 박스 폭은 calc(100% - 32px) 또는 max-width: 560px
+
+CSS 예시:
+
+html, body {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, p {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: clamp(38px, 10vw, 54px);
+    line-height: 1.18;
+    letter-spacing: -0.04em;
+  }
+
+  h2 {
+    font-size: clamp(30px, 8vw, 40px);
+    line-height: 1.25;
+    letter-spacing: -0.035em;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 1.75;
+    letter-spacing: -0.02em;
+  }
+
+  .text-panel,
+  .hero-content,
+  .project-content {
+    width: calc(100% - 32px);
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+3. 모바일 배경 이미지 가독성 유지
+이미지를 배경으로 사용할 때 텍스트와 이미지가 둘 다 살아야 합니다.
+
+- 이미지 위에 어두운 gradient overlay 적용
+- 텍스트 박스에는 반투명 블러 패널 적용
+- 인물 얼굴이나 핵심 오브젝트를 가리지 않도록 background-position 조정
+- 텍스트 영역은 하단 45~60%에 배치
+- 모바일에서 이미지가 너무 잘리면 background-position: center top 또는 center center로 조정
+
+4. 카카오톡 링크 썸네일 설정
+현재 카카오톡 공유 시 썸네일 이미지가 나오지 않습니다.
+사이트 head 태그에 Open Graph 메타태그를 추가해주세요.
+
+홈페이지 대표 이미지는 승경도 포스터 이미지로 설정해주세요.
+이미지는 public 폴더에 넣고 절대경로로 접근 가능하게 해주세요.
+
+예시:
+public/og-image.jpg
+
+index.html 또는 메타 설정 파일에 아래 추가:
+
+<title>AX Studio | 승경아 놀자</title>
+<meta name="description" content="전통 놀이 승경도를 기반으로 한 가족 역사 판타지 드라마와 글로벌 모바일게임 IP 프로젝트">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="AX Studio | 승경아 놀자">
+<meta property="og:description" content="전통 놀이 승경도를 기반으로 한 가족 역사 판타지 드라마와 모바일게임 IP 프로젝트">
+<meta property="og:image" content="https://axe-studio.replit.app/og-image.jpg">
+<meta property="og:url" content="https://axe-studio.replit.app/">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AX Studio | 승경아 놀자">
+<meta name="twitter:description" content="전통 놀이 승경도를 기반으로 한 가족 역사 판타지 드라마와 모바일게임 IP 프로젝트">
+<meta name="twitter:image" content="https://axe-studio.replit.app/og-image.jpg">
+
+5. OG 이미지 조건
+- 사이즈: 1200 x 630px
+- 파일명: og-image.jpg
+- 용량: 가능하면 1MB 이하
+- 텍스트 없는 포스터 이미지 또는 로고+포스터 조합
+- 반드시 https://axe-studio.replit.app/og-image.jpg 로 직접 열렸을 때 이미지가 보여야 함
+
+6. 카카오톡 캐시 대응
+수정 후 카카오 디벨로퍼스 공유 디버거에서
+https://axe-studio.replit.app/
+URL 캐시 초기화가 가능하도록 OG 태그가 정확히 반영되게 해주세요.
