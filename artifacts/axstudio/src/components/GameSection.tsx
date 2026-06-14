@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Users, Dice5, Swords, BookOpen, GraduationCap, Globe, Star, Scroll } from "lucide-react";
+import { Users, Dice5, Swords, BookOpen, GraduationCap, Globe, Star, Scroll, Trophy, Zap } from "lucide-react";
 
 export function GameSection() {
   const features = [
@@ -42,6 +42,16 @@ export function GameSection() {
       icon: <Scroll className="w-7 h-7 text-primary" />,
       title: "승경도 원작 스토리",
       description: "드라마와 연동된 원작 스토리라인으로 더 깊은 세계관 체험."
+    },
+    {
+      icon: <Trophy className="w-7 h-7 text-primary" />,
+      title: "랭킹 & 업적 시스템",
+      description: "전국 플레이어와 경쟁하고 특별 업적으로 희귀 칭호를 획득하세요!"
+    },
+    {
+      icon: <Zap className="w-7 h-7 text-primary" />,
+      title: "시즌 이벤트",
+      description: "드라마 방영에 맞춘 한정 이벤트와 특별 보상이 정기적으로 업데이트됩니다."
     }
   ];
 
