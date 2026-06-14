@@ -159,10 +159,7 @@ export function AuditionSection() {
                   >
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-lg font-bold text-foreground">
-                        {role.roleName}{" "}
-                        <span className="text-sm font-normal text-muted-foreground ml-2">
-                          {role.ageRange}
-                        </span>
+                        {role.ageRange}
                       </h4>
                       <span
                         className={`text-xs px-2 py-1 rounded-full ${
@@ -233,7 +230,7 @@ export function AuditionSection() {
                               key={role.id}
                               value={role.id.toString()}
                             >
-                              {role.roleName} ({role.ageRange})
+                              {role.ageRange}
                             </SelectItem>
                           ))}
                         </SelectContent>
