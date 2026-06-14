@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
-import { Newspaper, ChevronRight, Megaphone } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, ChevronUp, Megaphone } from "lucide-react";
 
 type NewsItem = {
   date: string;
@@ -67,6 +68,8 @@ const badgeColor = (badge?: string) => {
 };
 
 export function NewsSection() {
+  const [showPast, setShowPast] = useState(false);
+
   return (
     <section id="news" className="py-24 bg-card">
       <div className="container mx-auto px-6">
@@ -88,82 +91,106 @@ export function NewsSection() {
           </motion.div>
         </div>
 
-        <div className="grid lg:grid-cols-5 gap-10 items-start">
-
-          {/* 새로운 뉴스 */}
-          <div className="lg:col-span-3">
-            <div className="flex items-center gap-2 mb-6">
-              <Megaphone className="w-5 h-5 text-primary" />
-              <h4 className="text-lg font-bold text-foreground">새로운 소식</h4>
-            </div>
-            <div className="space-y-4">
-              {recentNews.map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08 }}
-                  viewport={{ once: true }}
-                  className="group p-6 rounded-2xl border border-border bg-background hover:border-primary/40 hover:shadow-md transition-all cursor-default"
-                >
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs text-muted-foreground">{item.date}</span>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-                      {item.category}
-                    </span>
-                    {item.badge && (
-                      <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${badgeColor(item.badge)}`}>
-                        {item.badge}
-                      </span>
-                    )}
-                  </div>
-                  <h5 className="text-base font-bold text-foreground mb-2 leading-snug group-hover:text-primary transition-colors">
-                    {item.title}
-                  </h5>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.summary}</p>
-                </motion.div>
-              ))}
-            </div>
+        {/* 새로운 소식 카드 */}
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center gap-2 mb-6">
+            <Megaphone className="w-5 h-5 text-primary" />
+            <h4 className="text-lg font-bold text-foreground">새로운 소식</h4>
           </div>
 
-          {/* 지난 뉴스 */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-2 mb-6">
-              <Newspaper className="w-5 h-5 text-muted-foreground" />
-              <h4 className="text-lg font-bold text-muted-foreground">지난 소식</h4>
-            </div>
-            <div className="space-y-0 divide-y divide-border rounded-2xl border border-border overflow-hidden bg-background">
-              {pastNews.map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: 16 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.07 }}
-                  viewport={{ once: true }}
-                  className="group flex items-start gap-4 px-5 py-4 hover:bg-muted/40 transition-colors cursor-default"
-                >
-                  <div className="shrink-0 pt-0.5">
-                    <span className="text-[11px] font-mono text-muted-foreground/60 whitespace-nowrap">
-                      {item.date}
+          <div className="space-y-4">
+            {recentNews.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08 }}
+                viewport={{ once: true }}
+                className="group p-6 rounded-2xl border border-border bg-background hover:border-primary/40 hover:shadow-md transition-all cursor-default"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs text-muted-foreground">{item.date}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+                    {item.category}
+                  </span>
+                  {item.badge && (
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${badgeColor(item.badge)}`}>
+                      {item.badge}
                     </span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
-                        {item.category}
-                      </span>
-                    </div>
-                    <p className="text-sm font-semibold text-foreground leading-snug group-hover:text-primary transition-colors">
-                      {item.title}
-                    </p>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-muted-foreground/30 shrink-0 mt-1 group-hover:text-primary/50 transition-colors" />
-                </motion.div>
-              ))}
-            </div>
+                  )}
+                </div>
+                <h5 className="text-base font-bold text-foreground mb-2 leading-snug group-hover:text-primary transition-colors">
+                  {item.title}
+                </h5>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.summary}</p>
+              </motion.div>
+            ))}
           </div>
 
+          {/* 더보기 버튼 */}
+          <div className="mt-8 text-center">
+            <button
+              onClick={() => setShowPast((v) => !v)}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border bg-background text-sm font-medium text-muted-foreground hover:border-primary/50 hover:text-primary transition-all"
+            >
+              {showPast ? (
+                <>
+                  <ChevronUp className="w-4 h-4" />
+                  접기
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="w-4 h-4" />
+                  지난 소식 더보기
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* 지난 소식 — 더보기 누를 때 펼쳐짐 */}
+          <AnimatePresence>
+            {showPast && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+                className="overflow-hidden"
+              >
+                <div className="pt-6">
+                  <div className="text-xs font-semibold text-muted-foreground tracking-widest uppercase mb-4 px-1">
+                    지난 소식
+                  </div>
+                  <div className="divide-y divide-border rounded-2xl border border-border overflow-hidden bg-background">
+                    {pastNews.map((item, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: 12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.06 }}
+                        className="group flex items-start gap-4 px-5 py-4 hover:bg-muted/40 transition-colors cursor-default"
+                      >
+                        <span className="shrink-0 text-[11px] font-mono text-muted-foreground/60 whitespace-nowrap pt-0.5">
+                          {item.date}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground mb-1 inline-block">
+                            {item.category}
+                          </span>
+                          <p className="text-sm font-semibold text-foreground leading-snug group-hover:text-primary transition-colors">
+                            {item.title}
+                          </p>
+                          <p className="text-xs text-muted-foreground leading-relaxed mt-1">{item.summary}</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
+
       </div>
     </section>
   );
