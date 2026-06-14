@@ -148,39 +148,54 @@ export function AuditionSection() {
               </div>
             ) : (
               <div className="space-y-4">
-                {roles?.map((role) => (
-                  <motion.div
-                    key={role.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    data-testid={`card-role-${role.id}`}
-                    className="p-6 border border-border rounded-lg hover:border-primary/50 transition-colors bg-background"
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h4 className="text-lg font-bold text-foreground">
-                          {role.roleName}
-                        </h4>
-                        <p className="text-xs text-muted-foreground mt-0.5">{role.ageRange}</p>
+                {roles?.map((role) => {
+                  const parts = role.description.split("||");
+                  const mainDesc = parts[0];
+                  const reqs = parts.slice(1);
+                  return (
+                    <motion.div
+                      key={role.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      data-testid={`card-role-${role.id}`}
+                      className="p-6 border border-border rounded-lg hover:border-primary/50 transition-colors bg-background"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <h4 className="text-lg font-bold text-foreground">
+                            {role.roleName}
+                          </h4>
+                          <p className="text-xs text-muted-foreground mt-0.5">{role.ageRange}</p>
+                        </div>
+                        <span
+                          className={`text-xs px-2 py-1 rounded-full ${
+                            role.status === "접수중"
+                              ? "bg-primary/10 text-primary"
+                              : role.status === "마감"
+                              ? "bg-muted text-muted-foreground"
+                              : "bg-secondary/10 text-secondary"
+                          }`}
+                        >
+                          {role.status}
+                        </span>
                       </div>
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full ${
-                          role.status === "접수중"
-                            ? "bg-primary/10 text-primary"
-                            : role.status === "마감"
-                            ? "bg-muted text-muted-foreground"
-                            : "bg-secondary/10 text-secondary"
-                        }`}
-                      >
-                        {role.status}
-                      </span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      {role.description}
-                    </p>
-                  </motion.div>
-                ))}
+                      <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                        {mainDesc}
+                      </p>
+                      {reqs.length > 0 && (
+                        <ul className="space-y-1.5">
+                          {reqs.map((req, i) => (
+                            <li key={i} className="flex items-center gap-2 text-sm text-foreground">
+                              <span className="text-primary font-bold">✔</span>
+                              {req}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </motion.div>
+                  );
+                })}
               </div>
             )}
 
@@ -188,8 +203,8 @@ export function AuditionSection() {
               <div>
                 <h4 className="font-bold mb-2">오디션 진행 안내</h4>
                 <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
-                  <li>1차 서류 및 영상 심사 (수시 개별 통보)</li>
-                  <li>2차 대면 오디션 (지정 연기 및 자유 연기)</li>
+                  <li>1차 서류 및 영상 심사</li>
+                  <li>2차 대면 오디션</li>
                   <li>3차 최종 미팅 및 계약</li>
                 </ul>
               </div>
