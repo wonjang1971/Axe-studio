@@ -28,9 +28,9 @@ export function CompanySection() {
           </div>
 
           <div className="bg-background rounded-2xl border border-border shadow-sm overflow-hidden">
-            <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border">
+            <div className="grid grid-cols-1 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-border">
               {/* Logo & Vision Area */}
-              <div className="p-12 flex flex-col justify-center items-center text-center bg-muted/30">
+              <div className="md:col-span-2 p-12 flex flex-col justify-center items-center text-center bg-muted/30">
                 <h3 className="text-3xl font-serif font-bold tracking-tighter text-foreground mb-6">
                   AXE STUDIO
                 </h3>
@@ -42,7 +42,7 @@ export function CompanySection() {
               </div>
 
               {/* Facts Area */}
-              <div className="p-8 md:p-12">
+              <div className="md:col-span-3 p-8 md:p-10">
                 <dl className="space-y-6">
                   {companyFacts.map((fact, index) => (
                     <div key={index} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 border-b border-border/50 pb-4 last:border-0 last:pb-0">

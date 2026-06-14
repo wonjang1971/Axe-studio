@@ -5,7 +5,7 @@ export function RoadmapSection() {
     {
       num: "01",
       title: "Series",
-      subtitle: "EBS 드라마 방영",
+      subtitle: "EBS 드라마(예정) 방영",
       desc: "지상파 채널을 통한 메인 스토리 전개 및 초기 팬덤 구축"
     },
     {

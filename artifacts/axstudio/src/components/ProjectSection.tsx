@@ -50,7 +50,7 @@ export function ProjectSection() {
               className="grid sm:grid-cols-2 gap-6"
             >
               <div className="p-6 bg-card rounded-xl border border-border shadow-sm">
-                <h4 className="text-xl font-bold text-foreground mb-3">EBS 드라마</h4>
+                <h4 className="text-xl font-bold text-foreground mb-3">EBS 드라마(예정)</h4>
                 <p className="text-sm text-muted-foreground">현대의 아이들이 조선 시대로 타임슬립하여 겪는 모험을 그린 웰메이드 역사 판타지 시리즈.</p>
               </div>
               <div className="p-6 bg-card rounded-xl border border-border shadow-sm">
