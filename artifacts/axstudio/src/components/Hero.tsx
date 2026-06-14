@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 import yunmokImg from "@assets/승경도윤목_온양민속박물관_1781435682818.jpg";
 
 export function Hero() {
+  const [, navigate] = useLocation();
+
   const scrollTo = (href: string) => {
     const target = document.querySelector(href);
     if (target) {
@@ -82,9 +85,9 @@ export function Hero() {
                 borderColor: "rgba(255,250,240,0.3)",
                 color: "#fffaf0",
               }}
-              onClick={() => scrollTo("#audition")}
+              onClick={() => navigate("/casting")}
             >
-              오디션 안내
+              캐스팅 안내
             </Button>
           </div>
         </motion.div>

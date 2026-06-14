@@ -11,7 +11,7 @@ export default function CastingPage() {
 
   return (
     <div className="min-h-screen w-full flex flex-col font-sans">
-      <Navbar />
+      <Navbar alwaysDark />
       <main className="flex-1 pt-24">
         <AuditionSection />
       </main>

@@ -3,18 +3,22 @@ import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
+interface NavbarProps {
+  alwaysDark?: boolean;
+}
+
+export function Navbar({ alwaysDark = false }: NavbarProps) {
+  const [isScrolled, setIsScrolled] = useState(alwaysDark);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
+  const isHome = location === "/";
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    if (alwaysDark) return;
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [alwaysDark]);
 
   const navLinks = [
     { name: "소식", href: "#news" },
@@ -31,18 +35,26 @@ export function Navbar() {
     setMobileMenuOpen(false);
     if (href.startsWith("/")) {
       navigate(href);
-    } else {
-      const target = document.querySelector(href);
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
-      }
+      return;
     }
+    if (!isHome) {
+      navigate("/");
+      setTimeout(() => {
+        const target = document.querySelector(href);
+        target?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+      return;
+    }
+    const target = document.querySelector(href);
+    target?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const dark = isScrolled || alwaysDark;
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
+        dark
           ? "bg-background/90 backdrop-blur-md shadow-sm py-4"
           : "bg-transparent py-6"
       }`}
@@ -65,7 +77,7 @@ export function Navbar() {
               href={link.href}
               onClick={(e) => handleNav(e, link.href)}
               className={`text-sm font-medium transition-colors hover:text-primary ${
-                isScrolled ? "text-muted-foreground" : "text-white/80 hover:text-white"
+                dark ? "text-muted-foreground" : "text-white/80 hover:text-white"
               }`}
             >
               {link.name}
@@ -75,7 +87,7 @@ export function Navbar() {
 
         {/* Mobile Menu Toggle */}
         <button
-          className={`md:hidden p-2 -mr-2 ${isScrolled ? "text-foreground" : "text-white"}`}
+          className={`md:hidden p-2 -mr-2 ${dark ? "text-foreground" : "text-white"}`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
