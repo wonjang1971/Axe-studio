@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, Megaphone } from "lucide-react";
+import { ChevronDown, ChevronUp, Megaphone, ExternalLink } from "lucide-react";
 
 type NewsItem = {
   date: string;
@@ -8,6 +8,7 @@ type NewsItem = {
   title: string;
   summary: string;
   badge?: "신규" | "중요";
+  link?: string | null;
 };
 
 const recentNews: NewsItem[] = [
@@ -19,11 +20,12 @@ const recentNews: NewsItem[] = [
     badge: "신규",
   },
   {
-    date: "2026.05",
-    category: "제작",
-    title: "EBS 드라마 기획안 공식 제출 완료",
-    summary: "'승경아 놀자' EBS 편성 제안서 및 파일럿 기획안을 공식 채널을 통해 제출하였습니다.",
+    date: "2026.06",
+    category: "오디션",
+    title: "출연 배우 오디션 시작",
+    summary: "'승경아 놀자' 드라마 출연 배우 공개 오디션이 시작되었습니다. 관련 기사는 게시 후 링크가 연결될 예정입니다.",
     badge: "신규",
+    link: null,
   },
   {
     date: "2026.04",
@@ -123,6 +125,20 @@ export function NewsSection() {
                   {item.title}
                 </h5>
                 <p className="text-sm text-muted-foreground leading-relaxed">{item.summary}</p>
+                {item.link ? (
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-primary hover:underline"
+                  >
+                    기사 보기 <ExternalLink className="w-3 h-3" />
+                  </a>
+                ) : item.link === null && (
+                  <span className="inline-flex items-center gap-1 mt-3 text-xs text-muted-foreground/50 select-none">
+                    기사 링크 추후 게시 예정
+                  </span>
+                )}
               </motion.div>
             ))}
           </div>
