@@ -3,13 +3,18 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: AX Studio API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auditions
+    description: Audition casting operations
+  - name: sponsorships
+    description: Sponsorship inquiry operations
+
 paths:
   /healthz:
     get:
@@ -24,6 +29,106 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /auditions/roles:
+    get:
+      operationId: listAuditionRoles
+      tags: [auditions]
+      summary: List available audition roles
+      responses:
+        "200":
+          description: List of audition roles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AuditionRole"
+
+  /auditions/apply:
+    post:
+      operationId: submitAuditionApplication
+      tags: [auditions]
+      summary: Submit an audition application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuditionApplicationInput"
+      responses:
+        "201":
+          description: Application submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditionApplication"
+        "400":
+          description: Validation error
+
+  /auditions/applications:
+    get:
+      operationId: listAuditionApplications
+      tags: [auditions]
+      summary: List all audition applications (admin)
+      responses:
+        "200":
+          description: List of applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AuditionApplication"
+
+  /sponsorships:
+    post:
+      operationId: submitSponsorshipInquiry
+      tags: [sponsorships]
+      summary: Submit a sponsorship inquiry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SponsorshipInquiryInput"
+      responses:
+        "201":
+          description: Inquiry submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SponsorshipInquiry"
+        "400":
+          description: Validation error
+
+    get:
+      operationId: listSponsorshipInquiries
+      tags: [sponsorships]
+      summary: List all sponsorship inquiries (admin)
+      responses:
+        "200":
+          description: List of inquiries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SponsorshipInquiry"
+
+  /stats:
+    get:
+      operationId: getSiteStats
+      tags: [auditions]
+      summary: Get site summary stats
+      responses:
+        "200":
+          description: Site stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteStats"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +139,114 @@ components:
       required:
         - status
 
+    AuditionRole:
+      type: object
+      required: [id, roleName, ageRange, description, status]
+      properties:
+        id:
+          type: integer
+        roleName:
+          type: string
+        ageRange:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [준비중, 접수중, 마감]
+
+    AuditionApplicationInput:
+      type: object
+      required: [roleId, childName, birthYear, gender, guardianName, phone]
+      properties:
+        roleId:
+          type: integer
+        childName:
+          type: string
+        birthYear:
+          type: string
+        gender:
+          type: string
+        guardianName:
+          type: string
+        phone:
+          type: string
+        portfolio:
+          type: ["string", "null"]
+        memo:
+          type: ["string", "null"]
+
+    AuditionApplication:
+      type: object
+      required: [id, roleId, childName, birthYear, gender, guardianName, phone, createdAt]
+      properties:
+        id:
+          type: integer
+        roleId:
+          type: integer
+        childName:
+          type: string
+        birthYear:
+          type: string
+        gender:
+          type: string
+        guardianName:
+          type: string
+        phone:
+          type: string
+        portfolio:
+          type: ["string", "null"]
+        memo:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    SponsorshipInquiryInput:
+      type: object
+      required: [organizationName, contactName, contactEmail, sponsorType, message]
+      properties:
+        organizationName:
+          type: string
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: ["string", "null"]
+        sponsorType:
+          type: string
+          enum: [지자체협찬, 기업협찬, 기타]
+        message:
+          type: string
+
+    SponsorshipInquiry:
+      type: object
+      required: [id, organizationName, contactName, contactEmail, sponsorType, message, createdAt]
+      properties:
+        id:
+          type: integer
+        organizationName:
+          type: string
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: ["string", "null"]
+        sponsorType:
+          type: string
+        message:
+          type: string
+        createdAt:
+          type: string
+
+    SiteStats:
+      type: object
+      required: [totalApplications, openRoles, totalInquiries]
+      properties:
+        totalApplications:
+          type: integer
+        openRoles:
+          type: integer
+        totalInquiries:
+          type: integer

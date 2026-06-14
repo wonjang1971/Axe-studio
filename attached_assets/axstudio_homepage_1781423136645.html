@@ -1,0 +1,1222 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>액스스튜디오 | 승경아 놀자</title>
+  <meta name="description" content="주식회사 액스스튜디오가 준비 중인 온 가족 역사 판타지 IP 승경아 놀자 공식 홈페이지">
+  <style>
+    :root {
+      --ink: #10100e;
+      --paper: #f4efe4;
+      --paper-2: #e5ddcb;
+      --gold: #c99a45;
+      --jade: #547c70;
+      --clay: #9b5544;
+      --blue: #233b4d;
+      --line: rgba(16, 16, 14, .16);
+      --white: #fffaf0;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      letter-spacing: 0;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px clamp(18px, 4vw, 56px);
+      color: var(--white);
+      background: linear-gradient(to bottom, rgba(0, 0, 0, .52), rgba(0, 0, 0, 0));
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .brand-logo {
+      width: 54px;
+      height: 30px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 250, 240, .4);
+      border-radius: 3px;
+      filter: contrast(1.08);
+    }
+
+    .nav {
+      display: flex;
+      gap: clamp(14px, 2.4vw, 30px);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 96svh;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      color: var(--white);
+      background: #111;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(5, 7, 7, .88) 0%, rgba(5, 7, 7, .66) 38%, rgba(5, 7, 7, .28) 70%, rgba(5, 7, 7, .52) 100%),
+        linear-gradient(0deg, rgba(5, 7, 7, .9) 0%, rgba(5, 7, 7, .1) 45%),
+        url("assets/seunggyeongdo-hero.png") center / cover no-repeat;
+      transform: scale(1.02);
+    }
+
+    .hero-inner {
+      position: relative;
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 150px 0 72px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 20px;
+      color: #f4d28d;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: currentColor;
+    }
+
+    h1 {
+      max-width: 790px;
+      margin: 0;
+      font-size: clamp(48px, 8vw, 112px);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 640px;
+      margin: 26px 0 0;
+      color: rgba(255, 250, 240, .86);
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 32px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border: 1px solid rgba(255, 250, 240, .4);
+      border-radius: 4px;
+      font-weight: 800;
+      background: rgba(255, 250, 240, .08);
+      color: var(--white);
+      backdrop-filter: blur(12px);
+    }
+
+    .btn.primary {
+      border-color: var(--gold);
+      background: var(--gold);
+      color: #17110a;
+    }
+
+    .status-strip {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(255, 250, 240, .2);
+      border-top: 1px solid rgba(255, 250, 240, .18);
+    }
+
+    .status-item {
+      padding: 20px clamp(18px, 3vw, 38px);
+      background: rgba(9, 10, 9, .78);
+    }
+
+    .status-item b {
+      display: block;
+      color: #f3d493;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .status-item span {
+      display: block;
+      color: rgba(255, 250, 240, .86);
+      font-size: 15px;
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+
+    main section {
+      padding: clamp(64px, 9vw, 112px) clamp(18px, 4vw, 56px);
+    }
+
+    .wrap {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, .82fr) minmax(280px, .58fr);
+      gap: clamp(28px, 6vw, 76px);
+      align-items: end;
+      margin-bottom: 36px;
+    }
+
+    .kicker {
+      margin: 0 0 12px;
+      color: var(--clay);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: 0;
+      word-break: keep-all;
+    }
+
+    .lead {
+      margin: 0;
+      color: rgba(16, 16, 14, .74);
+      font-size: 18px;
+      line-height: 1.75;
+      word-break: keep-all;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .feature-panel {
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: clamp(24px, 4vw, 42px);
+      color: var(--white);
+      background:
+        linear-gradient(0deg, rgba(13, 15, 13, .92), rgba(13, 15, 13, .18)),
+        url("assets/seunggyeongdo-hero.png") center / cover no-repeat;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .feature-panel h3 {
+      max-width: 580px;
+      margin: 0 0 16px;
+      font-size: clamp(28px, 4vw, 52px);
+      line-height: 1.08;
+      word-break: keep-all;
+    }
+
+    .feature-panel p {
+      max-width: 620px;
+      margin: 0;
+      color: rgba(255, 250, 240, .84);
+      line-height: 1.75;
+      font-size: 17px;
+      word-break: keep-all;
+    }
+
+    .cards {
+      display: grid;
+      gap: 18px;
+    }
+
+    .card {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 250, 240, .46);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      line-height: 1.25;
+    }
+
+    .card p {
+      margin: 0;
+      color: rgba(16, 16, 14, .72);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+
+    .dark-band {
+      color: var(--white);
+      background: #131715;
+    }
+
+    .game-section {
+      background: #fff8eb;
+    }
+
+    .game-showcase {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: clamp(22px, 4vw, 48px);
+      align-items: center;
+    }
+
+    .game-visual {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #131715;
+    }
+
+    .game-visual img {
+      display: block;
+      width: 100%;
+      max-height: 760px;
+      object-fit: contain;
+      background: #0d1517;
+    }
+
+    .game-points {
+      display: grid;
+      gap: 12px;
+    }
+
+    .game-point {
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(244, 239, 228, .62);
+    }
+
+    .game-point b {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--blue);
+      font-size: 18px;
+    }
+
+    .game-point span {
+      display: block;
+      color: rgba(16, 16, 14, .72);
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    .audition-layout {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: clamp(24px, 5vw, 72px);
+      align-items: start;
+    }
+
+    .notice {
+      position: sticky;
+      top: 96px;
+      padding: 26px;
+      border: 1px solid rgba(255, 250, 240, .2);
+      border-radius: 6px;
+      background: rgba(255, 250, 240, .06);
+    }
+
+    .notice strong {
+      display: block;
+      margin-bottom: 12px;
+      color: #f4d28d;
+      font-size: 20px;
+    }
+
+    .notice p {
+      margin: 0;
+      color: rgba(255, 250, 240, .76);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+
+    .steps {
+      display: grid;
+      gap: 14px;
+      counter-reset: step;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 18px;
+      padding: 22px;
+      border: 1px solid rgba(255, 250, 240, .16);
+      border-radius: 6px;
+      background: rgba(255, 250, 240, .05);
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: counter(step, decimal-leading-zero);
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      color: #17110a;
+      font-weight: 900;
+      background: #f4d28d;
+      border-radius: 50%;
+    }
+
+    .step h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .step p {
+      margin: 0;
+      color: rgba(255, 250, 240, .76);
+      line-height: 1.65;
+      word-break: keep-all;
+    }
+
+    .audition-board {
+      display: grid;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .role-card {
+      padding: 20px;
+      border: 1px solid rgba(255, 250, 240, .16);
+      border-radius: 6px;
+      background: rgba(255, 250, 240, .05);
+    }
+
+    .role-card b {
+      display: block;
+      margin-bottom: 8px;
+      color: #f4d28d;
+      font-size: 20px;
+    }
+
+    .role-card small {
+      display: block;
+      margin-bottom: 12px;
+      color: rgba(255, 250, 240, .56);
+      font-weight: 800;
+    }
+
+    .role-card p {
+      margin: 0;
+      color: rgba(255, 250, 240, .76);
+      line-height: 1.65;
+      word-break: keep-all;
+    }
+
+    .form-panel {
+      padding: 24px;
+      border: 1px solid rgba(255, 250, 240, .18);
+      border-radius: 6px;
+      background: rgba(255, 250, 240, .07);
+    }
+
+    .form-panel h3 {
+      margin: 0 0 16px;
+      font-size: 24px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .form-grid label {
+      display: grid;
+      gap: 7px;
+      color: rgba(255, 250, 240, .78);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .form-grid label.wide {
+      grid-column: 1 / -1;
+    }
+
+    .form-grid input,
+    .form-grid select,
+    .form-grid textarea {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 250, 240, .18);
+      border-radius: 4px;
+      color: var(--white);
+      background: rgba(0, 0, 0, .24);
+      outline: none;
+    }
+
+    .form-grid textarea {
+      min-height: 104px;
+      resize: vertical;
+    }
+
+    .form-grid input::placeholder,
+    .form-grid textarea::placeholder {
+      color: rgba(255, 250, 240, .42);
+    }
+
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .form-note {
+      margin: 12px 0 0;
+      color: rgba(255, 250, 240, .58);
+      font-size: 13px;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    .admin-panel {
+      margin-top: 18px;
+      padding: 22px;
+      border: 1px solid rgba(244, 210, 141, .28);
+      border-radius: 6px;
+      background: rgba(244, 210, 141, .08);
+    }
+
+    .admin-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .admin-item {
+      padding: 14px;
+      border: 1px solid rgba(255, 250, 240, .14);
+      border-radius: 4px;
+      color: rgba(255, 250, 240, .76);
+      background: rgba(0, 0, 0, .2);
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .admin-item b {
+      color: #f4d28d;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .company {
+      background: #f9f4e9;
+    }
+
+    .company-mark {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: clamp(22px, 4vw, 44px);
+      align-items: center;
+      margin-bottom: 30px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #151515;
+      color: var(--white);
+    }
+
+    .company-mark img {
+      display: block;
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .company-mark p {
+      margin: 0;
+      color: rgba(255, 250, 240, .78);
+      line-height: 1.75;
+      word-break: keep-all;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+
+    .fact {
+      min-height: 150px;
+      padding: 22px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: rgba(244, 239, 228, .55);
+    }
+
+    .fact span {
+      display: block;
+      margin-bottom: 18px;
+      color: var(--clay);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .fact b {
+      display: block;
+      font-size: 20px;
+      line-height: 1.35;
+      word-break: keep-all;
+    }
+
+    .roadmap {
+      background: var(--paper-2);
+    }
+
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .roadmap-item {
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 22px;
+      border-radius: 6px;
+      background: #fff8eb;
+      border: 1px solid rgba(16, 16, 14, .12);
+    }
+
+    .roadmap-item .num {
+      color: var(--jade);
+      font-weight: 900;
+    }
+
+    .roadmap-item h3 {
+      margin: 38px 0 12px;
+      font-size: 24px;
+    }
+
+    .roadmap-item p {
+      margin: 0;
+      color: rgba(16, 16, 14, .72);
+      line-height: 1.65;
+      word-break: keep-all;
+    }
+
+    .contact {
+      padding-bottom: 84px;
+      color: var(--white);
+      background:
+        linear-gradient(90deg, rgba(9, 10, 9, .9), rgba(9, 10, 9, .72)),
+        url("assets/seunggyeongdo-hero.png") center / cover no-repeat;
+    }
+
+    .contact-box {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 28px;
+      align-items: center;
+      padding: clamp(26px, 5vw, 46px);
+      border: 1px solid rgba(255, 250, 240, .22);
+      border-radius: 6px;
+      background: rgba(255, 250, 240, .06);
+      backdrop-filter: blur(12px);
+    }
+
+    .contact-box h2 {
+      font-size: clamp(30px, 4.5vw, 56px);
+    }
+
+    .contact-box p {
+      margin: 14px 0 0;
+      color: rgba(255, 250, 240, .78);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+
+    footer {
+      padding: 24px clamp(18px, 4vw, 56px);
+      color: rgba(255, 250, 240, .72);
+      background: #0a0c0b;
+      font-size: 13px;
+    }
+
+    footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .site-header {
+        position: absolute;
+        align-items: flex-start;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .hero {
+        min-height: 94svh;
+      }
+
+      .hero-inner {
+        padding-top: 118px;
+      }
+
+      .status-strip,
+      .section-head,
+      .project-grid,
+      .game-showcase,
+      .audition-layout,
+      .role-grid,
+      .form-grid,
+      .company-mark,
+      .facts,
+      .roadmap-grid,
+      .contact-box {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-panel {
+        min-height: 420px;
+      }
+
+      .notice {
+        position: static;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .step {
+        grid-template-columns: 1fr;
+      }
+
+      .status-item {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" aria-label="상단 메뉴">
+    <a class="brand" href="#top" aria-label="액스스튜디오 홈">
+      <img class="brand-logo" src="assets/axstudio-logo.png" alt="">
+      <span>AX STUDIO</span>
+    </a>
+    <nav class="nav" aria-label="주요 메뉴">
+      <a href="#project">작품</a>
+      <a href="#game">게임</a>
+      <a href="#audition">오디션</a>
+      <a href="#company">회사정보</a>
+      <a href="#roadmap">IP 확장</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="top">
+    <div class="hero-inner">
+      <p class="eyebrow">Family Historical Fantasy IP</p>
+      <h1>승경아 놀자</h1>
+      <p class="hero-copy">조선시대 전통 보드놀이 승경도를 현대적으로 재해석한 온 가족 역사 판타지. 놀이판이 깨어나는 순간, 아이들은 잊힌 직업과 사람들의 기억을 만나는 시간여행을 시작합니다.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#project">프로젝트 보기</a>
+        <a class="btn" href="#audition">오디션 안내</a>
+      </div>
+    </div>
+    <div class="status-strip" aria-label="프로젝트 요약">
+      <div class="status-item"><b>제작사</b><span>주식회사 액스스튜디오</span></div>
+      <div class="status-item"><b>준비 포맷</b><span>EBS 드라마 및 승경도 디지털 보드게임</span></div>
+      <div class="status-item"><b>장르</b><span>온 가족 역사 판타지 어드벤처</span></div>
+      <div class="status-item"><b>공간 지원</b><span>서울영상위원회 프로덕션 오피스 입주 제작사 선정</span></div>
+    </div>
+  </section>
+
+  <main>
+    <section id="project">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Main Project</p>
+            <h2>놀이가 시작되면, 모험이 열린다.</h2>
+          </div>
+          <p class="lead">「승경아 놀자」는 승경도와 윤목을 매개로 아이들이 조선의 다양한 시대와 직업 세계를 체험하는 장기 IP입니다. 역사, 진로, 감정 성장을 하나의 모험 구조 안에 담습니다.</p>
+        </div>
+
+        <div class="project-grid">
+          <article class="feature-panel">
+            <h3>전통 보드게임에서 출발한 시간여행 판타지</h3>
+            <p>게임 개발자를 꿈꾸는 소년 승경과 친구들이 낡은 승경도 놀이판을 발견하며 이야기가 시작됩니다. 각 미션은 하나의 직업, 하나의 가치, 하나의 봉인을 중심으로 펼쳐집니다.</p>
+          </article>
+
+          <div class="cards">
+            <article class="card">
+              <h3>드라마</h3>
+              <p>아동과 가족 시청자를 위한 역사 판타지 어드벤처로 개발 중입니다. 교육성과 서사적 재미가 함께 작동하는 시리즈 구조를 지향합니다.</p>
+            </article>
+            <article class="card">
+              <h3>디지털 보드게임</h3>
+              <p>승경도 판, 주사위, 관직 이동, 역사 이벤트 카드를 게임 인터랙션으로 확장해 작품 세계를 직접 체험하는 방향으로 준비하고 있습니다.</p>
+            </article>
+            <article class="card">
+              <h3>교육형 IP</h3>
+              <p>역사, 사회, 도덕, 진로 교육과 자연스럽게 연결되는 소재입니다. 학습 만화, 워크북, 체험 키트로 확장 가능한 구조를 갖고 있습니다.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="game-section" id="game">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Digital Board Game</p>
+            <h2>조선 관직의 꿈, 디지털로 부활하다.</h2>
+          </div>
+          <p class="lead">「승경도」 게임은 전통 놀이의 규칙을 현대적인 디지털 보드게임으로 옮기는 프로젝트입니다. 드라마 세계관과 연결되는 동시에, 독립적인 멀티플레이 게임과 교육용 버전으로 확장될 수 있습니다.</p>
+        </div>
+        <div class="game-showcase">
+          <figure class="game-visual">
+            <img src="assets/seunggyeongdo-gameboard-example.png" alt="승경도 디지털 보드게임 플레이 화면 예시">
+          </figure>
+          <div class="game-points">
+            <article class="game-point">
+              <b>최대 4인 멀티플레이</b>
+              <span>온라인, 오프라인, AI 대전까지 고려한 보드게임 구조로 가족과 친구가 함께 즐기는 플레이를 지향합니다.</span>
+            </article>
+            <article class="game-point">
+              <b>주사위와 관직 이동</b>
+              <span>주사위를 굴리고 관직 칸을 이동하며 승진, 강등, 특수 칸, 역사 이벤트가 이어지는 방식입니다.</span>
+            </article>
+            <article class="game-point">
+              <b>역사 이벤트 카드와 퀴즈</b>
+              <span>실제 조선 역사 사건과 인물을 카드와 미니게임으로 만나며, 놀이 속에서 자연스럽게 배울 수 있도록 설계합니다.</span>
+            </article>
+            <article class="game-point">
+              <b>교육용 EDU 버전</b>
+              <span>학교와 기관을 위한 커리큘럼, 교사용 대시보드, 학습 리포트 등 B2B 교육 확장도 함께 검토하고 있습니다.</span>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark-band" id="audition">
+      <div class="wrap audition-layout">
+        <div>
+          <p class="kicker">Casting Audition</p>
+          <h2>어린이 주요 배역을 찾습니다.</h2>
+          <div class="notice" style="margin-top: 22px;">
+            <strong>지원자와 보호자가 안심할 수 있는 공식 접수 창구</strong>
+            <p>현재 페이지에서 오디션 공고 확인과 지원서 접수가 가능합니다. 정식 운영 시 접수 자료는 제작사 전용 서버 또는 폼 서비스로 연결하는 것을 권장합니다.</p>
+          </div>
+        </div>
+        <div class="audition-board">
+          <div>
+            <p class="kicker">Child Roles First</p>
+            <div class="role-grid" id="roleList"></div>
+          </div>
+
+          <form class="form-panel" id="auditionForm">
+            <h3>오디션 지원서 접수</h3>
+            <div class="form-grid">
+              <label>
+                지원 배역
+                <select id="applyRole" name="role" required></select>
+              </label>
+              <label>
+                지원자 이름
+                <input name="childName" required placeholder="예: 김승경">
+              </label>
+              <label>
+                출생연도
+                <input name="birthYear" required inputmode="numeric" placeholder="예: 2014">
+              </label>
+              <label>
+                성별
+                <select name="gender" required>
+                  <option value="">선택</option>
+                  <option>여</option>
+                  <option>남</option>
+                  <option>무관/비공개</option>
+                </select>
+              </label>
+              <label>
+                보호자 이름
+                <input name="guardianName" required placeholder="예: 김보호">
+              </label>
+              <label>
+                보호자 연락처
+                <input name="phone" required placeholder="예: 010-0000-0000">
+              </label>
+              <label class="wide">
+                프로필 또는 연기 영상 링크
+                <input name="portfolio" placeholder="유튜브, Vimeo, 드라이브 링크 등">
+              </label>
+              <label class="wide">
+                자기소개 및 참고사항
+                <textarea name="memo" placeholder="연기 경험, 특기, 가능 일정, 보호자 전달사항 등을 적어주세요."></textarea>
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="btn primary" type="submit">지원서 접수</button>
+              <button class="btn" type="button" id="openAdmin">관리자</button>
+            </div>
+            <p class="form-note">현재 버전은 테스트용 정적 페이지라 접수 내용이 이 브라우저에 저장됩니다. 실제 공개 전에는 개인정보 처리방침, 보호자 동의, 서버 저장, 보안 설정을 추가해야 합니다.</p>
+          </form>
+
+          <div class="admin-panel hidden" id="adminPanel">
+            <form id="adminForm">
+              <h3>관리자 오디션 등록</h3>
+              <div class="form-grid">
+                <label>
+                  공고명
+                  <input name="title" required placeholder="예: 승경아 놀자 어린이 주연 오디션">
+                </label>
+                <label>
+                  접수상태
+                  <select name="status">
+                    <option>접수 준비중</option>
+                    <option>접수중</option>
+                    <option>마감</option>
+                  </select>
+                </label>
+                <label>
+                  배역명
+                  <input name="roleName" required placeholder="예: 최승경">
+                </label>
+                <label>
+                  연령대
+                  <input name="ageRange" required placeholder="예: 10~13세">
+                </label>
+                <label class="wide">
+                  배역 설명
+                  <textarea name="description" required placeholder="캐릭터 성격, 연기 포인트, 필요한 이미지"></textarea>
+                </label>
+              </div>
+              <div class="form-actions">
+                <button class="btn primary" type="submit">공고/배역 등록</button>
+                <button class="btn" type="button" id="exportApplications">접수 CSV 저장</button>
+                <button class="btn" type="button" id="resetDemo">데모 초기화</button>
+              </div>
+            </form>
+            <div class="admin-list" id="noticeList"></div>
+            <div class="admin-list" id="applicationList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="company" id="company">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Company</p>
+            <h2>액스스튜디오는 작품 중심의 IP 제작사입니다.</h2>
+          </div>
+          <p class="lead">방송 프로그램 제작 및 공급업, 영화 상영업 등을 기반으로 영상과 게임, 교육형 콘텐츠가 연결되는 프로젝트를 준비하고 있습니다.</p>
+        </div>
+        <div class="company-mark">
+          <img src="assets/axstudio-logo.png" alt="액스스튜디오 로고">
+          <p>액스스튜디오는 「승경아 놀자」와 「승경도」 디지털 보드게임을 중심으로, 전통 소재를 현대적인 영상과 인터랙티브 콘텐츠로 확장하는 제작사입니다. 현재 보유한 로고와 게임보드 이미지를 공식 자료로 반영했습니다.</p>
+        </div>
+        <div class="facts">
+          <div class="fact"><span>법인명</span><b>주식회사 액스스튜디오</b></div>
+          <div class="fact"><span>설립일</span><b>2025년 6월 25일</b></div>
+          <div class="fact"><span>소재지</span><b>경기도 파주시 탄현면 헤이리마을길<br>헤이리 예술마을 인근</b></div>
+          <div class="fact"><span>주요 업종</span><b>방송 프로그램 제작 및 공급업<br>영화 상영업 등</b></div>
+          <div class="fact"><span>제작 공간</span><b>2026년 2월 서울영상위원회 영화창작공간 프로덕션 오피스 입주 제작사 선정</b></div>
+          <div class="fact"><span>메인 IP</span><b>승경아 놀자</b></div>
+          <div class="fact"><span>현재 준비</span><b>EBS 드라마<br>승경도 디지털 보드게임</b></div>
+          <div class="fact"><span>방향성</span><b>역사, 진로, 가족, 게임형 체험 콘텐츠</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="roadmap" id="roadmap">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="kicker">IP Roadmap</p>
+            <h2>굿즈보다 먼저, 세계관을 신뢰하게 합니다.</h2>
+          </div>
+          <p class="lead">머천다이징은 전면 판매보다 IP 확장 가능성으로 제시하는 편이 지금 단계에 적합합니다. 작품, 게임, 교육, 체험이 같은 세계관에서 이어지도록 설계합니다.</p>
+        </div>
+        <div class="roadmap-grid">
+          <article class="roadmap-item">
+            <span class="num">01</span>
+            <div>
+              <h3>Series</h3>
+              <p>드라마를 통해 캐릭터, 세계관, 핵심 미션을 먼저 각인합니다.</p>
+            </div>
+          </article>
+          <article class="roadmap-item">
+            <span class="num">02</span>
+            <div>
+              <h3>Game</h3>
+              <p>주사위, 관직 이동, 역사 이벤트 카드, 퀴즈 미니게임을 디지털 보드게임으로 확장합니다.</p>
+            </div>
+          </article>
+          <article class="roadmap-item">
+            <span class="num">03</span>
+            <div>
+              <h3>Education</h3>
+              <p>학습 만화, 워크북, 교사용 활동지, 체험 키트로 교육 현장과 만납니다.</p>
+            </div>
+          </article>
+          <article class="roadmap-item">
+            <span class="num">04</span>
+            <div>
+              <h3>Experience</h3>
+              <p>보드게임, 전시, 캐릭터 상품은 작품 공개 이후 단계적으로 검토합니다.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact">
+      <div class="wrap contact-box">
+        <div>
+          <p class="kicker">Official Notice</p>
+          <h2>공식 소식은 이 페이지에서 업데이트됩니다.</h2>
+          <p>캐스팅 오디션, 제작 진행 상황, 게임 및 IP 확장 소식은 확정된 내용부터 순차적으로 공개됩니다.</p>
+        </div>
+        <a class="btn primary" href="#top">맨 위로</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 AX STUDIO Co., Ltd.</span>
+      <span>본 페이지는 「승경아 놀자」 제작 준비 및 공식 안내를 위한 임시 홈페이지입니다.</span>
+    </div>
+  </footer>
+  <script>
+    const defaultRoles = [
+      {
+        title: "승경아 놀자 어린이 주요 배역",
+        status: "접수 준비중",
+        roleName: "최승경",
+        ageRange: "10~13세",
+        description: "게임 개발자를 꿈꾸는 창의적인 리더형 소년. 게임처럼 세상을 분석하지만 현실 문제에는 서툴고, 모험을 통해 직업과 삶의 의미를 배워갑니다."
+      },
+      {
+        title: "승경아 놀자 어린이 주요 배역",
+        status: "접수 준비중",
+        roleName: "최정경",
+        ageRange: "11~14세",
+        description: "역사와 기록에 강한 완벽주의자. 과거 사건을 퍼즐처럼 분석하며 주령의 비밀과 잊힌 기억의 단서에 접근하는 인물입니다."
+      },
+      {
+        title: "승경아 놀자 어린이 주요 배역",
+        status: "접수 준비중",
+        roleName: "미래",
+        ageRange: "10~13세",
+        description: "감정 표현이 풍부하고 행동력이 좋은 친구. 다모, 검무수 등 여러 미션에서 용기와 공감의 성장을 보여주는 역할입니다."
+      },
+      {
+        title: "승경아 놀자 어린이 주요 배역",
+        status: "접수 준비중",
+        roleName: "석현",
+        ageRange: "10~13세",
+        description: "팀 안에서 균형을 잡아주는 친구. 위기 속에서 네 아이가 함께 움직여야 한다는 규칙과 연대의 의미를 드러내는 인물입니다."
+      }
+    ];
+
+    const store = {
+      roles: "axstudio_audition_roles",
+      applications: "axstudio_audition_applications"
+    };
+
+    const readStore = (key, fallback) => {
+      try {
+        return JSON.parse(localStorage.getItem(key)) || fallback;
+      } catch {
+        return fallback;
+      }
+    };
+
+    const writeStore = (key, value) => {
+      localStorage.setItem(key, JSON.stringify(value));
+    };
+
+    const safeText = (value) => String(value || "").replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[char]);
+
+    const getRoles = () => readStore(store.roles, defaultRoles);
+    const getApplications = () => readStore(store.applications, []);
+
+    function renderRoles() {
+      const roles = getRoles();
+      const roleList = document.querySelector("#roleList");
+      const applyRole = document.querySelector("#applyRole");
+      if (!roleList || !applyRole) return;
+
+      roleList.innerHTML = roles.map((role) => `
+        <article class="role-card">
+          <b>${safeText(role.roleName)}</b>
+          <small>${safeText(role.ageRange)} · ${safeText(role.status)}</small>
+          <p>${safeText(role.description)}</p>
+        </article>
+      `).join("");
+
+      applyRole.innerHTML = '<option value="">지원 배역 선택</option>' + roles.map((role) => (
+        `<option value="${safeText(role.roleName)}">${safeText(role.roleName)} (${safeText(role.ageRange)})</option>`
+      )).join("");
+    }
+
+    function renderAdmin() {
+      const notices = getRoles();
+      const applications = getApplications();
+      const noticeList = document.querySelector("#noticeList");
+      const applicationList = document.querySelector("#applicationList");
+      if (!noticeList || !applicationList) return;
+
+      noticeList.innerHTML = `<div class="admin-item"><b>등록된 배역 ${notices.length}개</b></div>` + notices.map((role, index) => `
+        <div class="admin-item">
+          <b>${index + 1}. ${safeText(role.roleName)}</b><br>
+          ${safeText(role.title)} · ${safeText(role.ageRange)} · ${safeText(role.status)}<br>
+          ${safeText(role.description)}
+        </div>
+      `).join("");
+
+      applicationList.innerHTML = `<div class="admin-item"><b>접수된 지원서 ${applications.length}건</b></div>` + applications.map((app, index) => `
+        <div class="admin-item">
+          <b>${index + 1}. ${safeText(app.childName)} · ${safeText(app.role)}</b><br>
+          출생연도 ${safeText(app.birthYear)} · 성별 ${safeText(app.gender)} · 보호자 ${safeText(app.guardianName)}<br>
+          연락처 ${safeText(app.phone)}<br>
+          링크 ${safeText(app.portfolio || "-")}<br>
+          ${safeText(app.memo || "")}
+        </div>
+      `).join("");
+    }
+
+    function downloadCsv() {
+      const rows = getApplications();
+      const headers = ["접수일", "지원배역", "지원자", "출생연도", "성별", "보호자", "연락처", "링크", "메모"];
+      const body = rows.map((row) => [
+        row.createdAt, row.role, row.childName, row.birthYear, row.gender, row.guardianName, row.phone, row.portfolio, row.memo
+      ]);
+      const escapeCell = (value) => `"${String(value || "").replaceAll('"', '""')}"`;
+      const csv = "\ufeff" + [headers, ...body].map((row) => row.map(escapeCell).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "axstudio_audition_applications.csv";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    document.querySelector("#auditionForm")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = Object.fromEntries(new FormData(event.currentTarget).entries());
+      const applications = getApplications();
+      applications.unshift({ ...data, createdAt: new Date().toLocaleString("ko-KR") });
+      writeStore(store.applications, applications);
+      event.currentTarget.reset();
+      renderAdmin();
+      alert("지원서가 접수되었습니다. 현재 데모 버전에서는 이 브라우저에만 저장됩니다.");
+    });
+
+    document.querySelector("#openAdmin")?.addEventListener("click", () => {
+      const panel = document.querySelector("#adminPanel");
+      panel?.classList.toggle("hidden");
+      renderAdmin();
+    });
+
+    document.querySelector("#adminForm")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = Object.fromEntries(new FormData(event.currentTarget).entries());
+      const roles = getRoles();
+      roles.unshift(data);
+      writeStore(store.roles, roles);
+      event.currentTarget.reset();
+      renderRoles();
+      renderAdmin();
+    });
+
+    document.querySelector("#exportApplications")?.addEventListener("click", downloadCsv);
+
+    document.querySelector("#resetDemo")?.addEventListener("click", () => {
+      if (!confirm("등록된 데모 배역과 접수 데이터를 초기화할까요?")) return;
+      localStorage.removeItem(store.roles);
+      localStorage.removeItem(store.applications);
+      renderRoles();
+      renderAdmin();
+    });
+
+    renderRoles();
+    renderAdmin();
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "FoGJKaGZI9vwJomUTYK6x"
+uri = "file://artifacts/axstudio/public/hero-bg.png"
+type = "image"
+title = "Joseon era kids playing boardgame"
+
+[[generated]]
+id = "a0ZXSKRcPZi616Vus062N"
+uri = "file://artifacts/axstudio/public/game-bg.png"
+type = "image"
+title = "Ancient Seunggyeongdo board game"
+
+[[generated]]
+id = "L2s180gWpoLEl8eW69szU"
+uri = "file://artifacts/axstudio/public/project-bg.png"
+type = "image"
+title = "Kids traveling time in Joseon"
