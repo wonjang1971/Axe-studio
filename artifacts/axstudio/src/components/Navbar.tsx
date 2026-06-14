@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [, navigate] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,18 +20,22 @@ export function Navbar() {
     { name: "소식", href: "#news" },
     { name: "프로젝트", href: "#project" },
     { name: "게임", href: "#game" },
-    { name: "캐스팅", href: "#audition" },
+    { name: "캐스팅", href: "/casting" },
     { name: "회사정보", href: "#company" },
     { name: "파트너쉽", href: "#sponsor" },
     { name: "로드맵", href: "#roadmap" },
   ];
 
-  const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
-      setMobileMenuOpen(false);
+    setMobileMenuOpen(false);
+    if (href.startsWith("/")) {
+      navigate(href);
+    } else {
+      const target = document.querySelector(href);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -58,7 +63,7 @@ export function Navbar() {
             <a
               key={link.name}
               href={link.href}
-              onClick={(e) => scrollTo(e, link.href)}
+              onClick={(e) => handleNav(e, link.href)}
               className={`text-sm font-medium transition-colors hover:text-primary ${
                 isScrolled ? "text-muted-foreground" : "text-white/80 hover:text-white"
               }`}
@@ -91,7 +96,7 @@ export function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={(e) => scrollTo(e, link.href)}
+                  onClick={(e) => handleNav(e, link.href)}
                   className="text-base font-medium text-foreground py-2 border-b border-border/50 last:border-0"
                 >
                   {link.name}

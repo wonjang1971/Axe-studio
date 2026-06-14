@@ -20,14 +20,6 @@ const recentNews: NewsItem[] = [
     badge: "신규",
   },
   {
-    date: "2026.06",
-    category: "오디션",
-    title: "출연 배우 오디션 시작",
-    summary: "'승경아 놀자' 드라마 출연 배우 공개 오디션이 시작되었습니다. 관련 기사는 게시 후 링크가 연결될 예정입니다.",
-    badge: "신규",
-    link: null,
-  },
-  {
     date: "2026.04",
     category: "게임",
     title: "모바일게임 개발사 파트너십 협의 진행 중",

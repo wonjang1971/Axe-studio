@@ -3,13 +3,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
+import CastingPage from "@/pages/casting";
 
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { StatusStrip } from "@/components/StatusStrip";
 import { ProjectSection } from "@/components/ProjectSection";
 import { GameSection } from "@/components/GameSection";
-import { AuditionSection } from "@/components/AuditionSection";
 import { CompanySection } from "@/components/CompanySection";
 import { SponsorshipSection } from "@/components/SponsorshipSection";
 import { RoadmapSection } from "@/components/RoadmapSection";
@@ -28,7 +28,6 @@ function Home() {
         <NewsSection />
         <ProjectSection />
         <GameSection />
-        <AuditionSection />
         <CompanySection />
         <SponsorshipSection />
         <RoadmapSection />
@@ -42,6 +41,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/casting" component={CastingPage} />
       <Route component={NotFound} />
     </Switch>
   );
