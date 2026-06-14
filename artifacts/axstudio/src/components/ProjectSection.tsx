@@ -4,32 +4,32 @@ import { Tv, Gamepad2, GraduationCap, Globe, Users, Sparkles } from "lucide-reac
 export function ProjectSection() {
   const cards = [
     {
-      icon: <Tv className="w-7 h-7 text-primary" />,
+      icon: <Tv className="w-6 h-6 text-primary" />,
       title: "EBS 드라마(예정)",
-      description: "현대 아이들이 조선 시대로 타임슬립하여 겪는 웰메이드 역사 판타지 시리즈.",
+      description: "현대 아이들이 조선 시대로 타임슬립하는 웰메이드 역사 판타지 시리즈.",
     },
     {
-      icon: <Gamepad2 className="w-7 h-7 text-primary" />,
+      icon: <Gamepad2 className="w-6 h-6 text-primary" />,
       title: "모바일게임 (글로벌 출시)",
       description: "드라마 세계관을 그대로 체험하는 승경도 멀티플레이어 모바일게임.",
     },
     {
-      icon: <GraduationCap className="w-7 h-7 text-primary" />,
+      icon: <GraduationCap className="w-6 h-6 text-primary" />,
       title: "에듀테인먼트 IP",
       description: "역사와 관직 제도를 자연스럽게 배우는 교육적 가족형 콘텐츠.",
     },
     {
-      icon: <Globe className="w-7 h-7 text-primary" />,
+      icon: <Globe className="w-6 h-6 text-primary" />,
       title: "글로벌 IP 확장",
-      description: "K-콘텐츠로서 한국을 넘어 전 세계 시장을 겨냥한 IP 비즈니스.",
+      description: "K-콘텐츠로서 전 세계 시장을 겨냥한 IP 비즈니스.",
     },
     {
-      icon: <Users className="w-7 h-7 text-primary" />,
+      icon: <Users className="w-6 h-6 text-primary" />,
       title: "가족형 콘텐츠",
-      description: "부모와 아이가 함께 즐기고, 함께 배우는 All-age 에듀테인먼트.",
+      description: "부모와 아이가 함께 즐기고 배우는 All-age 에듀테인먼트.",
     },
     {
-      icon: <Sparkles className="w-7 h-7 text-primary" />,
+      icon: <Sparkles className="w-6 h-6 text-primary" />,
       title: "타임슬립 세계관",
       description: "현대와 조선 시대를 오가는 독창적 판타지로 역사를 재해석합니다.",
     },
@@ -38,30 +38,79 @@ export function ProjectSection() {
   return (
     <section id="project" className="py-24 bg-background">
       <div className="container mx-auto px-6">
-        <div className="max-w-3xl mx-auto text-center mb-16">
+
+        {/* === 데스크탑 헤더 (lg+ 에서만 표시) === */}
+        <div className="hidden lg:block max-w-3xl mx-auto text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
             <h2 className="text-sm font-semibold text-primary tracking-widest uppercase mb-3">Main Project</h2>
-            <h3 className="text-4xl md:text-5xl font-serif font-bold text-foreground mb-6 leading-tight">
-              드라마부터 모바일게임,<br />그리고 에듀케이션까지
+            <h3 className="text-4xl xl:text-5xl font-serif font-bold text-foreground mb-6 leading-[1.3]">
+              드라마부터 모바일게임, 그리고 에듀케이션까지
             </h3>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              '승경아 놀자'는 단순한 영상을 넘어선 확장형 IP입니다. 조선 시대 관직을 오르는 전통 놀이 '승경도'를 기반으로,
+            <p className="text-lg text-muted-foreground leading-[1.65]">
+              '승경아 놀자'는 단순한 영상을 넘어선 확장형 IP입니다. 조선 시대 관직을 오르는 전통 놀이 '승경도'를 기반으로
               아이들이 역사 속으로 직접 뛰어드는 드라마와 글로벌 모바일게임으로 완성됩니다.
             </p>
           </motion.div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-stretch">
-          {/* Image — full display, no crop */}
+        {/* === 콘텐츠 영역 === */}
+        <div className="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-stretch">
+
+          {/* ── 모바일 히어로 카드 (lg 미만에서만 표시) ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative rounded-3xl overflow-hidden min-h-[520px] flex flex-col justify-between p-6 pt-10 lg:hidden mb-0"
+          >
+            {/* 배경 이미지 */}
+            <div className="absolute inset-0">
+              <img
+                src="/project-bg.png"
+                alt=""
+                className="w-full h-full object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/35 to-black/80" />
+            </div>
+
+            {/* 타이틀 + 설명 */}
+            <div className="relative z-10">
+              <span className="text-[11px] font-semibold text-primary/80 tracking-widest uppercase mb-2 block">Main Project</span>
+              <h3 className="text-[30px] font-serif font-bold text-white leading-[1.25] mb-3">
+                드라마부터 모바일게임, 그리고 에듀케이션까지
+              </h3>
+              <p className="text-[15px] text-white/85 leading-[1.65]">
+                전통 놀이 '승경도'를 기반으로 타임슬립 드라마와 글로벌 모바일게임으로 완성되는 확장형 IP입니다.
+              </p>
+            </div>
+
+            {/* 카드 그리드 */}
+            <div className="relative z-10 grid grid-cols-2 gap-2.5 mt-6">
+              {cards.map((card, i) => (
+                <div
+                  key={i}
+                  className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20 flex flex-col"
+                >
+                  <div className="mb-2 bg-primary/20 w-9 h-9 rounded-xl flex items-center justify-center shrink-0">
+                    {card.icon}
+                  </div>
+                  <h4 className="text-[12px] font-bold text-white mb-1 leading-snug">{card.title}</h4>
+                  <p className="text-[11px] text-white/75 leading-relaxed">{card.description}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* ── 데스크탑: 왼쪽 이미지 (lg+ 에서만 표시) ── */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl"
+            className="hidden lg:block relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl"
           >
             <img
               src="/project-bg.png"
@@ -75,12 +124,12 @@ export function ProjectSection() {
             </div>
           </motion.div>
 
-          {/* Cards — 3×2 grid */}
+          {/* ── 데스크탑: 오른쪽 카드 그리드 (lg+ 에서만 표시) ── */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="grid grid-cols-2 gap-4 content-start"
+            className="hidden lg:grid grid-cols-2 gap-4 content-start"
           >
             {cards.map((card, i) => (
               <div
@@ -95,6 +144,7 @@ export function ProjectSection() {
               </div>
             ))}
           </motion.div>
+
         </div>
       </div>
     </section>
