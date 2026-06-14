@@ -10,5 +10,9 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "tsx": "catalog:"
+  },
+  "dependencies": {
+    "@fontsource/noto-sans-kr": "^5.2.9",
+    "@napi-rs/canvas": "^1.0.0"
   }
 }
