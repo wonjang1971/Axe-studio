@@ -5,25 +5,25 @@ export function RoadmapSection() {
     {
       num: "01",
       title: "Series",
-      subtitle: "EBS 드라마(예정) 방영",
+      subtitle: "기획",
       desc: "지상파 채널을 통한 메인 스토리 전개 및 초기 팬덤 구축"
     },
     {
       num: "02",
       title: "Game",
-      subtitle: "디지털 보드게임 출시",
+      subtitle: "글로벌 모바일 게임",
       desc: "드라마 방영 시기에 맞춘 멀티플레이어 보드게임 런칭"
     },
     {
       num: "03",
       title: "Education",
-      subtitle: "교육용 프로그램",
+      subtitle: "교육용 콘텐츠",
       desc: "학교 및 기관용 방과후 학습 교재 및 에듀테인먼트 전개"
     },
     {
       num: "04",
       title: "Experience",
-      subtitle: "공간 기반 체험",
+      subtitle: "관광상품 및 경험",
       desc: "지역 명소와 연계한 승경도 오프라인 체험 콘텐츠 확장"
     }
   ];

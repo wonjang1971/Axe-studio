@@ -14,9 +14,11 @@ export function Footer() {
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-3 gap-16 mb-16">
           <div className="lg:col-span-1 space-y-6">
-            <h2 className="text-3xl font-serif font-bold tracking-tighter text-white">
-              AXE STUDIO
-            </h2>
+            <img
+              src="/logo.png"
+              alt="AXE STUDIO"
+              className="h-20 w-auto object-contain"
+            />
             <p className="text-background/70 text-sm leading-relaxed max-w-sm">
               우리는 가장 한국적인 이야기를 가장 현대적인 방식으로 풀어내는 크리에이티브 프로덕션입니다.
             </p>

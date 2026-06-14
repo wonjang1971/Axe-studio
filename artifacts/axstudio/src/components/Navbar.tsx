@@ -18,10 +18,10 @@ export function Navbar() {
   const navLinks = [
     { name: "소식", href: "#news" },
     { name: "프로젝트", href: "#project" },
-    { name: "보드게임", href: "#game" },
-    { name: "오디션", href: "#audition" },
+    { name: "게임", href: "#game" },
+    { name: "캐스팅", href: "#audition" },
     { name: "회사정보", href: "#company" },
-    { name: "파트너십", href: "#sponsor" },
+    { name: "파트너쉽", href: "#sponsor" },
     { name: "로드맵", href: "#roadmap" },
   ];
 
