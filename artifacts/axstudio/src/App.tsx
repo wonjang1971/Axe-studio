@@ -13,6 +13,7 @@ import { AuditionSection } from "@/components/AuditionSection";
 import { CompanySection } from "@/components/CompanySection";
 import { SponsorshipSection } from "@/components/SponsorshipSection";
 import { RoadmapSection } from "@/components/RoadmapSection";
+import { NewsSection } from "@/components/NewsSection";
 import { Footer } from "@/components/Footer";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ function Home() {
       <main className="flex-1">
         <Hero />
         <StatusStrip />
+        <NewsSection />
         <ProjectSection />
         <GameSection />
         <AuditionSection />

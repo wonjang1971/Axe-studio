@@ -16,6 +16,7 @@ export function Navbar() {
   }, []);
 
   const navLinks = [
+    { name: "소식", href: "#news" },
     { name: "프로젝트", href: "#project" },
     { name: "보드게임", href: "#game" },
     { name: "오디션", href: "#audition" },
