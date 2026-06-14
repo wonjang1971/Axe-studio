@@ -11,7 +11,7 @@ export function StatusStrip() {
     {
       icon: <MonitorPlay className="w-6 h-6 text-primary" />,
       label: "준비 포맷",
-      value: "EBS 드라마 + 보드게임",
+      value: "EBS 드라마(예정) + 모바일게임",
     },
     {
       icon: <Film className="w-6 h-6 text-primary" />,

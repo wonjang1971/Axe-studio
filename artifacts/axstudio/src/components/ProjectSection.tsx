@@ -13,12 +13,16 @@ export function ProjectSection() {
               transition={{ duration: 0.6 }}
               className="relative rounded-2xl overflow-hidden shadow-xl"
             >
-              <img 
-                src="/project-bg.png" 
-                alt="승경아 놀자 프로젝트" 
+              <img
+                src="/project-bg.png"
+                alt="승경아 놀자 타임슬립"
                 className="w-full aspect-[4/3] object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-black/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-4 left-4 text-white">
+                <span className="text-xs font-bold tracking-widest uppercase opacity-70">Family Historical Fantasy</span>
+                <p className="text-lg font-serif font-bold mt-0.5 drop-shadow">시간이 열린다 — 타임슬립 판타지</p>
+              </div>
             </motion.div>
           </div>
           

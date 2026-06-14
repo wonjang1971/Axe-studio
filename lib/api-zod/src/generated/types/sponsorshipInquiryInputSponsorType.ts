@@ -10,7 +10,7 @@ export type SponsorshipInquiryInputSponsorType = typeof SponsorshipInquiryInputS
 
 
 export const SponsorshipInquiryInputSponsorType = {
-  지자체협찬: '지자체협찬',
-  기업협찬: '기업협찬',
+  장소협찬: '장소협찬',
+  '기업(제품)협찬': '기업(제품)협찬',
   기타: '기타',
 } as const;

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Users, Dice5, History, GraduationCap } from "lucide-react";
+import { Users, Dice5, History, GraduationCap, Globe } from "lucide-react";
 
 export function GameSection() {
   const features = [
@@ -20,8 +20,8 @@ export function GameSection() {
     },
     {
       icon: <GraduationCap className="w-8 h-8 text-primary" />,
-      title: "EDU 버젼 지원",
-      description: "학교와 기관에서 교육용으로 활용할 수 있는 맞춤형 모드 제공."
+      title: "교육용 EDU 버전",
+      description: "학교와 기관에서 활용하는 맞춤형 커리큘럼 연계 교육용 모드 별도 제공."
     }
   ];
 
@@ -36,12 +36,12 @@ export function GameSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-sm font-semibold text-primary tracking-widest uppercase mb-3">Digital Board Game</h2>
-            <h3 className="text-4xl md:text-5xl font-serif font-bold text-foreground mb-6">전통이 디지털로 깨어나다</h3>
+            <h2 className="text-sm font-semibold text-primary tracking-widest uppercase mb-3">Mobile Game</h2>
+            <h3 className="text-4xl md:text-5xl font-serif font-bold text-foreground mb-6">전통이 모바일로 깨어나다</h3>
             <p className="text-lg text-muted-foreground">
               드라마 속 아이들이 하던 그 게임을 직접 즐겨보세요.
-              <br className="hidden sm:block" /> 
-              전통 놀이 승경도가 화려한 그래픽과 함께 디지털 보드게임으로 재탄생합니다.
+              <br className="hidden sm:block" />
+              전통 놀이 승경도가 화려한 그래픽과 함께 글로벌 모바일게임으로 재탄생합니다.
             </p>
           </motion.div>
         </div>
@@ -70,15 +70,28 @@ export function GameSection() {
             viewport={{ once: true }}
             className="relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl"
           >
-            <img 
-              src="/game-bg.png" 
-              alt="승경도 보드게임 UI" 
+            <img
+              src="/game-bg.png"
+              alt="승경도 모바일게임 UI"
               className="w-full aspect-[4/3] object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8 text-white">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex flex-col justify-end p-8 text-white">
               <span className="text-primary font-bold tracking-wider mb-2">개발 진행중</span>
-              <h3 className="text-2xl font-serif font-bold mb-2">승경아 놀자: 디지털 에디션</h3>
-              <p className="text-white/80 text-sm">드라마 방영 시기에 맞춰 정식 출시됩니다.</p>
+              <h3 className="text-2xl font-serif font-bold mb-3">승경아 놀자: 모바일 에디션</h3>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2 text-sm text-white/80">
+                  <span className="w-2 h-2 rounded-full bg-primary inline-block" />
+                  일반용 — 가족·친구와 함께 즐기는 멀티플레이
+                </div>
+                <div className="flex items-center gap-2 text-sm text-white/80">
+                  <span className="w-2 h-2 rounded-full bg-primary/60 inline-block" />
+                  교육용 — 학교·기관용 커리큘럼 연계 버전
+                </div>
+                <div className="flex items-center gap-2 text-sm text-white/60 mt-1">
+                  <Globe className="w-3.5 h-3.5" />
+                  글로벌 동시 출시 예정
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>

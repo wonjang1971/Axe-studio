@@ -8,7 +8,7 @@ export function CompanySection() {
     { label: "주요업종", value: "방송프로그램제작 및 공급업, 영화상영업" },
     { label: "제작공간", value: "서울영상위원회 (2026년 2월 입주 선정)" },
     { label: "메인IP", value: "승경아 놀자" },
-    { label: "현재준비", value: "EBS 드라마 + 디지털보드게임" },
+    { label: "현재준비", value: "EBS 드라마(예정) + 모바일게임 (글로벌 출시)" },
   ];
 
   return (

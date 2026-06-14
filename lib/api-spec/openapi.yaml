@@ -215,7 +215,7 @@ components:
           type: ["string", "null"]
         sponsorType:
           type: string
-          enum: [지자체협찬, 기업협찬, 기타]
+          enum: [장소협찬, 기업(제품)협찬, 기타]
         message:
           type: string
 

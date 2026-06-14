@@ -71,7 +71,7 @@ export const SubmitSponsorshipInquiryBody = zod.object({
   "contactName": zod.string(),
   "contactEmail": zod.string(),
   "contactPhone": zod.string().nullish(),
-  "sponsorType": zod.enum(['지자체협찬', '기업협찬', '기타']),
+  "sponsorType": zod.enum(['장소협찬', '기업(제품)협찬', '기타']),
   "message": zod.string()
 })
 
