@@ -47,10 +47,15 @@ export function Hero() {
           </motion.span>
 
           <h1
-            className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold leading-none drop-shadow-2xl"
+            className="font-serif font-bold leading-tight drop-shadow-2xl space-y-1"
             style={{ color: "#fffaf0", textShadow: "0 4px 32px rgba(0,0,0,0.7)" }}
           >
-            승경아 놀자
+            <span className="block text-5xl md:text-7xl lg:text-8xl tracking-widest" style={{ color: "#f4d28d" }}>
+              승경도
+            </span>
+            <span className="block text-6xl md:text-8xl lg:text-9xl">
+              승경아 놀자
+            </span>
           </h1>
 
           <p
