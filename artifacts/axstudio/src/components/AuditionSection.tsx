@@ -158,9 +158,12 @@ export function AuditionSection() {
                     className="p-6 border border-border rounded-lg hover:border-primary/50 transition-colors bg-background"
                   >
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="text-lg font-bold text-foreground">
-                        {role.ageRange}
-                      </h4>
+                      <div>
+                        <h4 className="text-lg font-bold text-foreground">
+                          {role.roleName}
+                        </h4>
+                        <p className="text-xs text-muted-foreground mt-0.5">{role.ageRange}</p>
+                      </div>
                       <span
                         className={`text-xs px-2 py-1 rounded-full ${
                           role.status === "접수중"
@@ -230,7 +233,7 @@ export function AuditionSection() {
                               key={role.id}
                               value={role.id.toString()}
                             >
-                              {role.ageRange}
+                              {role.roleName} · {role.ageRange}
                             </SelectItem>
                           ))}
                         </SelectContent>
