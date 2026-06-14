@@ -4,15 +4,15 @@ export function RoadmapSection() {
   const phases = [
     {
       num: "01",
-      title: "Series",
-      subtitle: "기획",
-      desc: "지상파 채널을 통한 메인 스토리 전개 및 초기 팬덤 구축"
-    },
-    {
-      num: "02",
       title: "Game",
       subtitle: "글로벌 모바일 게임",
       desc: "드라마 방영 시기에 맞춘 멀티플레이어 보드게임 런칭"
+    },
+    {
+      num: "02",
+      title: "Series",
+      subtitle: "기획",
+      desc: "지상파 채널을 통한 메인 스토리 전개 및 초기 팬덤 구축"
     },
     {
       num: "03",
