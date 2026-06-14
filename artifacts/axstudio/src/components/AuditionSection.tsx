@@ -148,10 +148,11 @@ export function AuditionSection() {
               </div>
             ) : (
               <div className="space-y-4">
-                {roles?.map((role) => {
+                {roles?.map((role, idx) => {
                   const parts = role.description.split("||");
                   const mainDesc = parts[0];
                   const reqs = parts.slice(1);
+                  const isLead = idx === 0;
                   return (
                     <motion.div
                       key={role.id}
@@ -159,17 +160,30 @@ export function AuditionSection() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       data-testid={`card-role-${role.id}`}
-                      className="p-6 border border-border rounded-lg hover:border-primary/50 transition-colors bg-background"
+                      className={`p-6 border rounded-lg transition-colors bg-background ${
+                        isLead
+                          ? "border-primary/40 hover:border-primary ring-1 ring-primary/10"
+                          : "border-border hover:border-primary/50"
+                      }`}
                     >
                       <div className="flex justify-between items-start mb-3">
-                        <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span
+                            className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                              isLead
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted text-muted-foreground border border-border"
+                            }`}
+                          >
+                            {isLead ? "주연" : "주조연"}
+                          </span>
                           <h4 className="text-lg font-bold text-foreground">
                             {role.roleName}
                           </h4>
-                          <p className="text-xs text-muted-foreground mt-0.5">{role.ageRange}</p>
+                          <p className="text-xs text-muted-foreground">{role.ageRange}</p>
                         </div>
                         <span
-                          className={`text-xs px-2 py-1 rounded-full ${
+                          className={`text-xs px-2 py-1 rounded-full shrink-0 ml-2 ${
                             role.status === "접수중"
                               ? "bg-primary/10 text-primary"
                               : role.status === "마감"
