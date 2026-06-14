@@ -94,7 +94,7 @@ export function NewsSection() {
         </div>
 
         {/* 새로운 소식 카드 */}
-        <div className="max-w-3xl mx-auto">
+        <div>
           <div className="flex items-center gap-2 mb-6">
             <Megaphone className="w-5 h-5 text-primary" />
             <h4 className="text-lg font-bold text-foreground">새로운 소식</h4>
