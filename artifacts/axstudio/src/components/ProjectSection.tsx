@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Tv, Gamepad2, GraduationCap, Globe, Users, Sparkles } from "lucide-react";
+import { Tv, Gamepad2, GraduationCap, Globe, Users, Sparkles, BookOpen, Landmark, ShoppingBag, Music } from "lucide-react";
 
 export function ProjectSection() {
   const cards = [
@@ -32,6 +32,26 @@ export function ProjectSection() {
       icon: <Sparkles className="w-6 h-6 text-primary" />,
       title: "타임슬립 세계관",
       description: "현대와 조선 시대를 오가는 독창적 판타지로 역사를 재해석합니다.",
+    },
+    {
+      icon: <BookOpen className="w-6 h-6 text-primary" />,
+      title: "도서 출판",
+      description: "드라마 원작 소설, 그림책, 학습 도서 등 출판 IP 확장.",
+    },
+    {
+      icon: <Landmark className="w-6 h-6 text-primary" />,
+      title: "관광 상품",
+      description: "지역 명소와 연계한 승경도 테마 체험 관광 상품 개발.",
+    },
+    {
+      icon: <ShoppingBag className="w-6 h-6 text-primary" />,
+      title: "Goods",
+      description: "캐릭터 굿즈, 전통 놀이 키트, 라이선싱 상품 기획 및 판매.",
+    },
+    {
+      icon: <Music className="w-6 h-6 text-primary" />,
+      title: "음원 사업",
+      description: "드라마 OST 및 전통 음악 기반 오리지널 음원 제작·유통.",
     },
   ];
 
