@@ -39,7 +39,7 @@ export function ProjectSection() {
     <section id="project" className="py-24 bg-background">
       <div className="container mx-auto px-6">
 
-        {/* === 데스크탑 헤더 (lg+ 에서만 표시) === */}
+        {/* 데스크탑 헤더 */}
         <div className="hidden lg:block max-w-3xl mx-auto text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -57,55 +57,84 @@ export function ProjectSection() {
           </motion.div>
         </div>
 
-        {/* === 콘텐츠 영역 === */}
         <div className="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-stretch">
 
-          {/* ── 모바일 히어로 카드 (lg 미만에서만 표시) ── */}
+          {/* ── 모바일 히어로 카드 ── */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="relative rounded-3xl overflow-hidden min-h-[520px] flex flex-col justify-between p-6 pt-10 lg:hidden mb-0"
+            className="relative rounded-3xl overflow-hidden lg:hidden"
+            style={{ minHeight: 560, padding: "42px 22px" }}
           >
-            {/* 배경 이미지 */}
+            {/* 배경 이미지: center top — 승경도 보드판이 상단에 노출 */}
             <div className="absolute inset-0">
               <img
                 src="/project-bg.png"
                 alt=""
                 className="w-full h-full object-cover object-top"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/35 to-black/80" />
+              {/* 3단 그라디언트: 상단 투명 → 중단 반투명 → 하단 불투명 */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.38) 35%, rgba(0,0,0,0.84) 100%)",
+                }}
+              />
             </div>
 
-            {/* 타이틀 + 설명 */}
-            <div className="relative z-10">
-              <span className="text-[11px] font-semibold text-primary/80 tracking-widest uppercase mb-2 block">Main Project</span>
-              <h3 className="text-[30px] font-serif font-bold text-white leading-[1.25] mb-3">
-                드라마부터 모바일게임, 그리고 에듀케이션까지
+            {/* 콘텐츠 패널: 상단 40%(≈220px) 이미지 노출 후 글래스 패널 시작 */}
+            <div
+              className="relative z-10 rounded-[18px] p-5"
+              style={{
+                marginTop: 220,
+                background: "rgba(0,0,0,0.38)",
+                backdropFilter: "blur(6px)",
+                WebkitBackdropFilter: "blur(6px)",
+              }}
+            >
+              <span className="text-[11px] font-semibold text-primary/80 tracking-widest uppercase mb-2 block">
+                Main Project
+              </span>
+              <h3
+                className="text-[30px] font-serif font-bold text-white leading-[1.25] mb-3"
+                style={{ textShadow: "0 2px 10px rgba(0,0,0,0.65)" }}
+              >
+                드라마부터 모바일게임, 에듀케이션까지
               </h3>
-              <p className="text-[15px] text-white/85 leading-[1.65]">
+              <p
+                className="text-[15px] text-white/90 leading-[1.65] mb-5"
+                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}
+              >
                 전통 놀이 '승경도'를 기반으로 타임슬립 드라마와 글로벌 모바일게임으로 완성되는 확장형 IP입니다.
               </p>
-            </div>
 
-            {/* 카드 그리드 */}
-            <div className="relative z-10 grid grid-cols-2 gap-2.5 mt-6">
-              {cards.map((card, i) => (
-                <div
-                  key={i}
-                  className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20 flex flex-col"
-                >
-                  <div className="mb-2 bg-primary/20 w-9 h-9 rounded-xl flex items-center justify-center shrink-0">
-                    {card.icon}
+              {/* 카드 그리드 */}
+              <div className="grid grid-cols-2 gap-2.5">
+                {cards.map((card, i) => (
+                  <div
+                    key={i}
+                    className="p-3 rounded-2xl border border-white/20 flex flex-col"
+                    style={{ background: "rgba(255,255,255,0.08)" }}
+                  >
+                    <div className="mb-2 bg-primary/25 w-8 h-8 rounded-xl flex items-center justify-center shrink-0">
+                      {card.icon}
+                    </div>
+                    <h4
+                      className="text-[12px] font-bold text-white mb-0.5 leading-snug"
+                      style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
+                    >
+                      {card.title}
+                    </h4>
+                    <p className="text-[11px] text-white/80 leading-relaxed">{card.description}</p>
                   </div>
-                  <h4 className="text-[12px] font-bold text-white mb-1 leading-snug">{card.title}</h4>
-                  <p className="text-[11px] text-white/75 leading-relaxed">{card.description}</p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </motion.div>
 
-          {/* ── 데스크탑: 왼쪽 이미지 (lg+ 에서만 표시) ── */}
+          {/* ── 데스크탑: 왼쪽 이미지 ── */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -119,12 +148,16 @@ export function ProjectSection() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
             <div className="absolute bottom-6 left-6 text-white">
-              <span className="text-xs font-bold tracking-widest uppercase opacity-60">Family Historical Fantasy</span>
-              <p className="text-xl font-serif font-bold mt-1 drop-shadow">시간이 열린다 — 타임슬립 판타지</p>
+              <span className="text-xs font-bold tracking-widest uppercase opacity-60">
+                Family Historical Fantasy
+              </span>
+              <p className="text-xl font-serif font-bold mt-1 drop-shadow">
+                시간이 열린다 — 타임슬립 판타지
+              </p>
             </div>
           </motion.div>
 
-          {/* ── 데스크탑: 오른쪽 카드 그리드 (lg+ 에서만 표시) ── */}
+          {/* ── 데스크탑: 오른쪽 카드 그리드 ── */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
