@@ -111,23 +111,22 @@ export function SponsorshipSection() {
   return (
     <section id="sponsor" className="py-24 bg-background">
       <div className="container mx-auto px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-4">
-                협찬 및 파트너십
-              </h2>
-              <p className="text-lg text-muted-foreground">
-                가장 한국적인 IP로 전 세계와 소통할 파트너를 모십니다.
-              </p>
-            </motion.div>
-          </div>
+        <div className="max-w-3xl mx-auto text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-4">
+              협찬 및 파트너십
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              가장 한국적인 IP로 전 세계와 소통할 파트너를 모십니다.
+            </p>
+          </motion.div>
+        </div>
 
-          <div className="grid lg:grid-cols-5 gap-12 items-start">
+        <div className="grid lg:grid-cols-5 gap-12 items-start">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -374,7 +373,6 @@ export function SponsorshipSection() {
             </motion.div>
           </div>
         </div>
-      </div>
     </section>
   );
 }

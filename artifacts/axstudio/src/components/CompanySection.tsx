@@ -14,19 +14,24 @@ export function CompanySection() {
   return (
     <section id="company" className="py-24 bg-card border-y border-border">
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto"
-        >
-          <div className="text-center mb-16">
+        <div className="max-w-3xl mx-auto text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-4">회사정보</h2>
             <p className="text-muted-foreground">
               신뢰할 수 있는 파트너, 액스스튜디오가 만들어갑니다.
             </p>
-          </div>
+          </motion.div>
+        </div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
           <div className="bg-background rounded-2xl border border-border shadow-sm overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-border">
               {/* Logo & Vision Area */}
