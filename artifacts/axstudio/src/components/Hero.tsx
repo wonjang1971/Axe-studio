@@ -15,7 +15,7 @@ export function Hero() {
       {/* Background — actual historical Seunggyeongdo board */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
-        style={{ backgroundImage: "url('/seunggyeongdo-board.jpg')" }}
+        style={{ backgroundImage: "url('/seunggyeongdo-board.jpg?v=2')" }}
       />
 
       {/* Warm sepia-to-dark overlay — preserves the aged paper feel */}
