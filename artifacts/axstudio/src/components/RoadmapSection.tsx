@@ -11,7 +11,7 @@ export function RoadmapSection() {
     {
       num: "02",
       title: "Series",
-      subtitle: "기획",
+      subtitle: "제작·방영",
       desc: "지상파 채널을 통한 메인 스토리 전개 및 초기 팬덤 구축"
     },
     {
