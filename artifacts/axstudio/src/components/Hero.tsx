@@ -46,14 +46,17 @@ export function Hero() {
             조선시대 실존 전통 놀이 원작 · AXE Studio Flagship IP
           </motion.span>
 
-          <h1
-            className="font-serif font-bold leading-tight drop-shadow-2xl space-y-1"
-            style={{ color: "#fffaf0", textShadow: "0 4px 32px rgba(0,0,0,0.7)" }}
-          >
-            <span className="block text-5xl md:text-7xl lg:text-8xl tracking-widest" style={{ color: "#f4d28d" }}>
+          <h1 className="drop-shadow-2xl space-y-3">
+            <span
+              className="block text-7xl md:text-9xl lg:text-[11rem] font-sans font-black tracking-tight leading-none"
+              style={{ color: "#f4d28d", textShadow: "0 4px 32px rgba(0,0,0,0.8)", letterSpacing: "-0.02em" }}
+            >
               승경도
             </span>
-            <span className="block text-6xl md:text-8xl lg:text-9xl">
+            <span
+              className="block text-2xl md:text-3xl lg:text-4xl font-serif font-medium tracking-[0.18em] leading-none"
+              style={{ color: "rgba(255,250,240,0.75)", textShadow: "0 2px 12px rgba(0,0,0,0.6)" }}
+            >
               승경아 놀자
             </span>
           </h1>
