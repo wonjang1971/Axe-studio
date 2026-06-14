@@ -1,34 +1,44 @@
 import { motion } from "framer-motion";
-import { Users, Dice5, History, GraduationCap, Globe } from "lucide-react";
+import { Users, Dice5, Swords, BookOpen, GraduationCap, Globe } from "lucide-react";
 
 export function GameSection() {
   const features = [
     {
-      icon: <Users className="w-8 h-8 text-primary" />,
+      icon: <Users className="w-7 h-7 text-primary" />,
       title: "4인 멀티플레이어",
-      description: "온라인에서 친구, 가족들과 함께 실시간으로 즐기는 승경도 게임."
+      description: "친구, 가족과 함께 즐기는 실시간 모바일 승경도."
     },
     {
-      icon: <Dice5 className="w-8 h-8 text-primary" />,
-      title: "윤목(주사위) & 품계",
-      description: "전통 방식의 윷을 던져 관직을 오르내리는 스릴 넘치는 승급 시스템."
+      icon: <Dice5 className="w-7 h-7 text-primary" />,
+      title: "윤목 (주사위) & 품제",
+      description: "전통 방식의 윷을 던져 관직을 오르고 미션 수행!"
     },
     {
-      icon: <History className="w-8 h-8 text-primary" />,
+      icon: <Swords className="w-7 h-7 text-primary" />,
+      title: "미션 수행 & 관직 승급",
+      description: "시대를 넘나들며 미션을 해결하고 관직을 승급하세요!"
+    },
+    {
+      icon: <BookOpen className="w-7 h-7 text-primary" />,
       title: "역사 이벤트 카드",
-      description: "임진왜란, 훈민정음 창제 등 실제 역사적 사건이 게임의 판도를 바꿉니다."
+      description: "임진왜란, 훈민정음 창제 등 실제 역사 스토리가 카드로 등장!"
     },
     {
-      icon: <GraduationCap className="w-8 h-8 text-primary" />,
+      icon: <GraduationCap className="w-7 h-7 text-primary" />,
       title: "교육용 EDU 버전",
-      description: "학교와 기관에서 활용하는 맞춤형 커리큘럼 연계 교육용 모드 별도 제공."
+      description: "학교와 기관에서 활용 가능한 맞춤형 학습 모드 제공!"
+    },
+    {
+      icon: <Globe className="w-7 h-7 text-primary" />,
+      title: "글로벌 멀티플레이",
+      description: "전 세계 친구들과 실시간으로 승경도를 즐겨보세요!"
     }
   ];
 
   return (
     <section id="game" className="py-24 bg-card relative overflow-hidden">
       <div className="absolute inset-0 bg-background/50" />
-      
+
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <motion.div
@@ -46,24 +56,29 @@ export function GameSection() {
           </motion.div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          {/* Feature grid — 3×2 */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="grid sm:grid-cols-2 gap-6"
+            className="grid sm:grid-cols-2 gap-5"
           >
             {features.map((feature, i) => (
-              <div key={i} className="bg-background p-6 rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow">
-                <div className="mb-4 bg-primary/10 w-16 h-16 rounded-xl flex items-center justify-center">
+              <div
+                key={i}
+                className="bg-background p-5 rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="mb-3 bg-primary/10 w-12 h-12 rounded-xl flex items-center justify-center">
                   {feature.icon}
                 </div>
-                <h4 className="text-xl font-bold text-foreground mb-2">{feature.title}</h4>
-                <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
+                <h4 className="text-base font-bold text-foreground mb-1">{feature.title}</h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </motion.div>
 
+          {/* Game image */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -73,22 +88,22 @@ export function GameSection() {
             <img
               src="/game-bg.png"
               alt="승경도 모바일게임 UI"
-              className="w-full aspect-[4/3] object-cover"
+              className="w-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex flex-col justify-end p-8 text-white">
-              <span className="text-primary font-bold tracking-wider mb-2">개발 진행중</span>
-              <h3 className="text-2xl font-serif font-bold mb-3">승경아 놀자: 모바일 에디션</h3>
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2 text-sm text-white/80">
-                  <span className="w-2 h-2 rounded-full bg-primary inline-block" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end p-6 text-white">
+              <span className="text-primary font-bold tracking-wider mb-1 text-sm">개발 진행중</span>
+              <h3 className="text-xl font-serif font-bold mb-2">승경아 놀자: 모바일 에디션</h3>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2 text-xs text-white/80">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block" />
                   일반용 — 가족·친구와 함께 즐기는 멀티플레이
                 </div>
-                <div className="flex items-center gap-2 text-sm text-white/80">
-                  <span className="w-2 h-2 rounded-full bg-primary/60 inline-block" />
+                <div className="flex items-center gap-2 text-xs text-white/80">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary/60 inline-block" />
                   교육용 — 학교·기관용 커리큘럼 연계 버전
                 </div>
-                <div className="flex items-center gap-2 text-sm text-white/60 mt-1">
-                  <Globe className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-2 text-xs text-white/60 mt-1">
+                  <Globe className="w-3 h-3" />
                   글로벌 동시 출시 예정
                 </div>
               </div>
