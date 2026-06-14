@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export function CompanySection() {
   const companyFacts = [
-    { label: "법인명", value: "주식회사 액스스튜디오 (AX STUDIO)" },
+    { label: "법인명", value: "주식회사 액스스튜디오 (AXE STUDIO)" },
     { label: "설립일", value: "2025년 6월 25일" },
     { label: "소재지", value: "경기도 파주시 헤이리 예술마을" },
     { label: "주요업종", value: "방송프로그램제작 및 공급업, 영화상영업" },
@@ -32,7 +32,7 @@ export function CompanySection() {
               {/* Logo & Vision Area */}
               <div className="p-12 flex flex-col justify-center items-center text-center bg-muted/30">
                 <h3 className="text-3xl font-serif font-bold tracking-tighter text-foreground mb-6">
-                  AX STUDIO
+                  AXE STUDIO
                 </h3>
                 <p className="text-muted-foreground leading-relaxed">
                   우리는 가장 한국적인 이야기를<br />

@@ -44,7 +44,7 @@ export function Navbar() {
       <div className="container mx-auto px-6 flex items-center justify-between">
         <Link href="/">
           <span className={`text-2xl font-bold font-serif tracking-tighter ${isScrolled ? "text-foreground" : "text-white"}`}>
-            AX STUDIO
+            AXE STUDIO
           </span>
         </Link>
 

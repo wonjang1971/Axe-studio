@@ -6,7 +6,7 @@ export function StatusStrip() {
     {
       icon: <Clapperboard className="w-6 h-6 text-primary" />,
       label: "제작사",
-      value: "AX STUDIO",
+      value: "AXE STUDIO",
     },
     {
       icon: <MonitorPlay className="w-6 h-6 text-primary" />,

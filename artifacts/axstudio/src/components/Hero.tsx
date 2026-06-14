@@ -28,7 +28,7 @@ export function Hero() {
           className="max-w-3xl mx-auto space-y-6"
         >
           <span className="inline-block px-4 py-1.5 rounded-full bg-primary/20 text-primary-foreground border border-primary/30 text-sm font-medium tracking-widest uppercase mb-4">
-            AX Studio Flagship IP
+            AXE Studio Flagship IP
           </span>
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white drop-shadow-lg leading-tight">
             승경아 놀자

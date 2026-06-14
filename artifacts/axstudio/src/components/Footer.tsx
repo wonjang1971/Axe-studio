@@ -15,7 +15,7 @@ export function Footer() {
         <div className="grid lg:grid-cols-3 gap-16 mb-16">
           <div className="lg:col-span-1 space-y-6">
             <h2 className="text-3xl font-serif font-bold tracking-tighter text-white">
-              AX STUDIO
+              AXE STUDIO
             </h2>
             <p className="text-background/70 text-sm leading-relaxed max-w-sm">
               우리는 가장 한국적인 이야기를 가장 현대적인 방식으로 풀어내는 크리에이티브 프로덕션입니다.
@@ -61,7 +61,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-background/10 text-sm text-background/50">
-          <p>© {new Date().getFullYear()} AX STUDIO. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} AXE STUDIO. All rights reserved.</p>
           
           <button 
             onClick={scrollToTop}
