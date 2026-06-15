@@ -1,6 +1,6 @@
 kind = "web"
 previewPath = "/"
-title = "AX Studio Homepage"
+title = "AXE Studio Homepage"
 version = "1.0.0"
 id = "artifacts/axstudio"
 router = "path"
