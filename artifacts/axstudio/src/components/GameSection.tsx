@@ -83,81 +83,71 @@ export function GameSection() {
 
         <div className="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-stretch">
 
-          {/* ── 모바일 히어로 카드 ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="relative rounded-3xl overflow-hidden lg:hidden"
-            style={{ minHeight: 580, padding: "42px 22px" }}
-          >
-            {/* 배경 이미지: center top — 포스터 주인공(호랑이/곰)이 상단에 노출 */}
-            <div className="absolute inset-0">
-              <img
-                src="/game-bg.png"
-                alt=""
-                className="w-full h-full object-cover"
-                style={{ objectPosition: "center 15%" }}
-              />
-              {/* 3단 그라디언트 */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.40) 35%, rgba(0,0,0,0.88) 100%)",
-                }}
-              />
-            </div>
+          {/* ── 모바일 레이아웃 ── */}
+          <div className="lg:hidden flex flex-col gap-6">
 
-            {/* 콘텐츠 패널: 상단 40%(≈230px) 이미지 노출 후 글래스 패널 */}
-            <div
-              className="relative z-10 rounded-[18px] p-5"
-              style={{
-                marginTop: 230,
-                background: "rgba(0,0,0,0.42)",
-                backdropFilter: "blur(6px)",
-                WebkitBackdropFilter: "blur(6px)",
-              }}
+            {/* 헤더 */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center"
             >
-              <span className="text-[11px] font-semibold text-primary/80 tracking-widest uppercase mb-2 block">
+              <span className="text-xs font-semibold text-primary tracking-widest uppercase mb-2 block">
                 Mobile Game
               </span>
-              <h3
-                className="text-[30px] font-serif font-bold text-white leading-[1.25] mb-3"
-                style={{ textShadow: "0 2px 10px rgba(0,0,0,0.65)" }}
-              >
+              <h3 className="text-3xl font-serif font-bold text-foreground mb-3 leading-tight">
                 전통이 모바일로 깨어나다
               </h3>
-              <p
-                className="text-[15px] text-white/90 leading-[1.65] mb-5"
-                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}
-              >
-                드라마 속 아이들이 하던 승경도를 직접 즐겨보세요. 화려한 그래픽의 글로벌 모바일게임으로 재탄생합니다.
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                드라마 속 아이들이 하던 승경도를 직접 즐겨보세요.<br />
+                화려한 그래픽의 글로벌 모바일게임으로 재탄생합니다.
               </p>
+            </motion.div>
 
-              {/* 4개 기능 카드 */}
-              <div className="grid grid-cols-2 gap-2.5">
-                {mobileFeatures.map((feature, i) => (
-                  <div
-                    key={i}
-                    className="p-3 rounded-2xl border border-white/20 flex flex-col"
-                    style={{ background: "rgba(255,255,255,0.08)" }}
-                  >
-                    <div className="mb-2 bg-primary/25 w-8 h-8 rounded-xl flex items-center justify-center shrink-0">
-                      <span className="scale-75 block">{feature.icon}</span>
-                    </div>
-                    <h4
-                      className="text-[12px] font-bold text-white mb-0.5 leading-snug"
-                      style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
-                    >
-                      {feature.title}
-                    </h4>
-                    <p className="text-[11px] text-white/80 leading-relaxed">{feature.description}</p>
-                  </div>
-                ))}
-              </div>
+            {/* 포스터 이미지 — 전체 비율 유지 */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="rounded-2xl overflow-hidden shadow-2xl border border-border/40"
+            >
+              <img
+                src="/game-bg.png"
+                alt="승경도 모바일게임 포스터"
+                className="w-full h-auto block"
+              />
+            </motion.div>
+
+            {/* 개발 상태 배지 */}
+            <div className="flex items-center justify-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-primary inline-block animate-pulse" />
+              <span className="text-sm font-semibold text-primary">개발 진행중 · 글로벌 동시 출시 예정</span>
             </div>
-          </motion.div>
+
+            {/* 기능 카드 2×2 */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="grid grid-cols-2 gap-3"
+            >
+              {mobileFeatures.map((feature, i) => (
+                <div
+                  key={i}
+                  className="bg-background border border-border rounded-2xl p-4 flex flex-col shadow-sm"
+                >
+                  <div className="mb-2 bg-primary/10 w-9 h-9 rounded-xl flex items-center justify-center shrink-0">
+                    <span className="scale-75 block">{feature.icon}</span>
+                  </div>
+                  <h4 className="text-[13px] font-bold text-foreground mb-1 leading-snug">
+                    {feature.title}
+                  </h4>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed">{feature.description}</p>
+                </div>
+              ))}
+            </motion.div>
+          </div>
 
           {/* ── 데스크탑: 왼쪽 카드 5×2 ── */}
           <motion.div
