@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,18 +22,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Building2, MapPin, HelpCircle, CheckCircle2 } from "lucide-react";
-
-const MOCK_CODE = "123456";
+import { Building2, MapPin, HelpCircle } from "lucide-react";
 
 export function SponsorshipSection() {
   const { toast } = useToast();
   const submitMutation = useSubmitSponsorshipInquiry();
-
-  const [phoneVerified, setPhoneVerified] = useState(false);
-  const [codeSent, setCodeSent] = useState(false);
-  const [codeInput, setCodeInput] = useState("");
-  const [codeError, setCodeError] = useState("");
 
   const form = useForm<SponsorFormValues>({
     resolver: zodResolver(sponsorSchema),
@@ -48,41 +40,7 @@ export function SponsorshipSection() {
     },
   });
 
-  const phoneValue = form.watch("contactPhone");
-
-  const handleSendCode = () => {
-    if (!phoneValue || phoneValue.length < 10) {
-      form.setError("contactPhone", { message: "연락처를 먼저 입력해주세요" });
-      return;
-    }
-    setCodeSent(true);
-    setCodeError("");
-    setCodeInput("");
-    toast({
-      title: "인증번호 발송",
-      description: `${phoneValue}로 인증번호를 발송했습니다. (테스트: ${MOCK_CODE})`,
-    });
-  };
-
-  const handleVerifyCode = () => {
-    if (codeInput === MOCK_CODE) {
-      setPhoneVerified(true);
-      setCodeError("");
-      toast({ title: "인증 완료", description: "휴대폰 번호가 인증되었습니다." });
-    } else {
-      setCodeError("인증번호가 올바르지 않습니다. 다시 확인해주세요.");
-    }
-  };
-
   const onSubmit = (data: SponsorFormValues) => {
-    if (data.contactPhone && !phoneVerified) {
-      toast({
-        title: "휴대폰 인증 필요",
-        description: "연락처를 입력하셨다면 인증을 완료해주세요.",
-        variant: "destructive",
-      });
-      return;
-    }
     submitMutation.mutate(
       { data: { ...data, sponsorType: data.sponsorType as any } },
       {
@@ -93,9 +51,6 @@ export function SponsorshipSection() {
               "협찬 및 파트너십 문의가 성공적으로 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.",
           });
           form.reset();
-          setPhoneVerified(false);
-          setCodeSent(false);
-          setCodeInput("");
         },
         onError: () => {
           toast({
@@ -269,74 +224,15 @@ export function SponsorshipSection() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>연락처 (선택)</FormLabel>
-                        <div className="flex gap-2">
-                          <FormControl>
-                            <Input
-                              placeholder="010-0000-0000"
-                              data-testid="input-contactPhone"
-                              disabled={phoneVerified}
-                              {...field}
-                              value={field.value || ""}
-                            />
-                          </FormControl>
-                          {phoneVerified ? (
-                            <div className="flex items-center gap-1 text-sm text-green-600 font-medium whitespace-nowrap px-2">
-                              <CheckCircle2 className="w-4 h-4" />
-                              인증완료
-                            </div>
-                          ) : (
-                            <Button
-                              type="button"
-                              variant="outline"
-                              className="whitespace-nowrap shrink-0"
-                              onClick={handleSendCode}
-                              data-testid="button-sponsor-send-code"
-                            >
-                              인증번호 발송
-                            </Button>
-                          )}
-                        </div>
+                        <FormControl>
+                          <Input
+                            placeholder="010-0000-0000"
+                            data-testid="input-contactPhone"
+                            {...field}
+                            value={field.value || ""}
+                          />
+                        </FormControl>
                         <FormMessage />
-
-                        {codeSent && !phoneVerified && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            className="mt-2 space-y-2"
-                          >
-                            <div className="flex gap-2">
-                              <Input
-                                placeholder="인증번호 6자리"
-                                maxLength={6}
-                                value={codeInput}
-                                onChange={(e) => setCodeInput(e.target.value)}
-                                data-testid="input-sponsor-verify-code"
-                              />
-                              <Button
-                                type="button"
-                                className="whitespace-nowrap shrink-0"
-                                onClick={handleVerifyCode}
-                                data-testid="button-sponsor-verify-code"
-                              >
-                                확인
-                              </Button>
-                            </div>
-                            {codeError && (
-                              <p className="text-sm text-destructive">{codeError}</p>
-                            )}
-                            <p className="text-xs text-muted-foreground">
-                              인증번호가 오지 않으면{" "}
-                              <button
-                                type="button"
-                                className="underline"
-                                onClick={handleSendCode}
-                              >
-                                재발송
-                              </button>
-                              을 눌러주세요.
-                            </p>
-                          </motion.div>
-                        )}
                       </FormItem>
                     )}
                   />

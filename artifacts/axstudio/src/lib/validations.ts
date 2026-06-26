@@ -11,6 +11,7 @@ export const auditionSchema = z.object({
   phone: z.string().min(10, "연락처를 입력해주세요"),
   portfolio: z.string().optional(),
   memo: z.string().optional(),
+  guardianConsent: z.boolean().refine((value) => value === true, "보호자 동의가 필요합니다"),
 });
 
 export type AuditionFormValues = z.infer<typeof auditionSchema>;

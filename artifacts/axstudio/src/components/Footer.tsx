@@ -4,6 +4,9 @@ import { useGetSiteStats } from "@workspace/api-client-react";
 
 export function Footer() {
   const { data: stats } = useGetSiteStats();
+  const openRoles = stats?.openRoles ?? 4;
+  const totalApplications = stats?.totalApplications ?? 0;
+  const totalInquiries = stats?.totalInquiries ?? 0;
   
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -36,8 +39,8 @@ export function Footer() {
                   서울영상위원회 제작공간 입주 확정
                 </li>
                 <li className="border-b border-background/10 pb-4">
-                  <span className="block text-primary mb-1">진행중</span>
-                  '승경아 놀자' 주연 아역배우 오디션 모집 중
+                  <span className="block text-primary mb-1">접수중</span>
+                  '승경아 놀자' 어린이 주요 배역 오디션 접수 중
                 </li>
               </ul>
             </div>
@@ -47,15 +50,15 @@ export function Footer() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-background/70 text-sm">오픈된 배역</span>
-                  <span className="text-xl font-bold text-accent">{stats?.openRoles || 0}개</span>
+                  <span className="text-xl font-bold text-accent">{openRoles}개</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-background/70 text-sm">누적 지원자</span>
-                  <span className="text-xl font-bold text-accent">{stats?.totalApplications || 0}명</span>
+                  <span className="text-xl font-bold text-accent">{totalApplications}명</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-background/70 text-sm">제휴 문의</span>
-                  <span className="text-xl font-bold text-accent">{stats?.totalInquiries || 0}건</span>
+                  <span className="text-xl font-bold text-accent">{totalInquiries}건</span>
                 </div>
               </div>
             </div>

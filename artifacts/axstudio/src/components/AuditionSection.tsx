@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -29,9 +29,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CheckCircle2, MessageSquare } from "lucide-react";
-
-const MOCK_CODE = "123456";
+import { MessageSquare } from "lucide-react";
 
 export function AuditionSection() {
   const { toast } = useToast();
@@ -39,14 +37,10 @@ export function AuditionSection() {
   const { data: roles, isLoading } = useListAuditionRoles();
   const submitMutation = useSubmitAuditionApplication();
 
-  const [phoneVerified, setPhoneVerified] = useState(false);
-  const [codeSent, setCodeSent] = useState(false);
-  const [codeInput, setCodeInput] = useState("");
-  const [codeError, setCodeError] = useState("");
-
   const form = useForm<AuditionFormValues>({
     resolver: zodResolver(auditionSchema),
     defaultValues: {
+      roleId: undefined,
       childName: "",
       birthYear: "",
       gender: "",
@@ -54,57 +48,22 @@ export function AuditionSection() {
       phone: "",
       portfolio: "",
       memo: "",
+      guardianConsent: false,
     },
   });
 
-  const phoneValue = form.watch("phone");
-
-  const handleSendCode = () => {
-    if (!phoneValue || phoneValue.length < 10) {
-      form.setError("phone", { message: "연락처를 먼저 입력해주세요" });
-      return;
-    }
-    setCodeSent(true);
-    setCodeError("");
-    setCodeInput("");
-    toast({
-      title: "인증번호 발송",
-      description: `${phoneValue}로 인증번호를 발송했습니다. (테스트: ${MOCK_CODE})`,
-    });
-  };
-
-  const handleVerifyCode = () => {
-    if (codeInput === MOCK_CODE) {
-      setPhoneVerified(true);
-      setCodeError("");
-      toast({ title: "인증 완료", description: "휴대폰 번호가 인증되었습니다." });
-    } else {
-      setCodeError("인증번호가 올바르지 않습니다. 다시 확인해주세요.");
-    }
-  };
-
   const onSubmit = (data: AuditionFormValues) => {
-    if (!phoneVerified) {
-      toast({
-        title: "휴대폰 인증 필요",
-        description: "연락처 인증을 먼저 완료해주세요.",
-        variant: "destructive",
-      });
-      return;
-    }
+    const { guardianConsent, ...applicationData } = data;
     submitMutation.mutate(
-      { data },
+      { data: applicationData },
       {
         onSuccess: () => {
           toast({
             title: "접수 완료",
             description:
-              "오디션 지원서가 정상 접수되었습니다. 검토 후 내방 오디션 일정을 개별 안내해드립니다.",
+              "지원서가 접수되었습니다. 액스스튜디오 캐스팅 담당자가 검토 후 합격자에 한해 보호자 연락처로 개별 안내드립니다.",
           });
           form.reset();
-          setPhoneVerified(false);
-          setCodeSent(false);
-          setCodeInput("");
           queryClient.invalidateQueries({
             queryKey: getListAuditionRolesQueryKey(),
           });
@@ -121,21 +80,21 @@ export function AuditionSection() {
   };
 
   return (
-    <section id="audition" className="py-24 bg-card">
+    <section id="audition" className="py-12 md:py-24 bg-card">
       <div className="container mx-auto px-6">
-        <div className="max-w-3xl mx-auto text-center mb-16">
+        <div className="max-w-3xl mx-auto text-center mb-8 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-4">
             오디션 접수
           </h2>
           <p className="text-muted-foreground">
-            '승경아 놀자'와 함께할 빛나는 재능을 찾습니다.
+            어린이 주요 배역을 찾습니다. 접수 내용은 액스스튜디오 캐스팅 담당자가 확인합니다.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16">
           {/* Roles Info */}
           <div>
-            <h3 className="text-2xl font-bold mb-8 flex items-center gap-2">
+            <h3 className="text-2xl font-bold mb-6 md:mb-8 flex items-center gap-2">
               <span className="w-8 h-[2px] bg-primary" />
               모집 배역
             </h3>
@@ -160,13 +119,13 @@ export function AuditionSection() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       data-testid={`card-role-${role.id}`}
-                      className={`p-6 border rounded-lg transition-colors bg-background ${
+                      className={`p-5 md:p-6 border rounded-lg transition-colors bg-background ${
                         isLead
                           ? "border-primary/40 hover:border-primary ring-1 ring-primary/10"
                           : "border-border hover:border-primary/50"
                       }`}
                     >
-                      <div className="flex justify-between items-start mb-3">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-3">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span
                             className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
@@ -183,7 +142,7 @@ export function AuditionSection() {
                           <p className="text-xs text-muted-foreground">{role.ageRange}</p>
                         </div>
                         <span
-                          className={`text-xs px-2 py-1 rounded-full shrink-0 ml-2 ${
+                          className={`text-xs px-2 py-1 rounded-full shrink-0 sm:ml-2 w-fit ${
                             role.status === "접수중"
                               ? "bg-primary/10 text-primary"
                               : role.status === "마감"
@@ -213,7 +172,7 @@ export function AuditionSection() {
               </div>
             )}
 
-            <div className="mt-8 p-6 bg-muted rounded-lg space-y-4">
+            <div className="mt-8 p-5 md:p-6 bg-muted rounded-lg space-y-4">
               <div>
                 <h4 className="font-bold mb-2">오디션 진행 안내</h4>
                 <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
@@ -234,8 +193,12 @@ export function AuditionSection() {
           </div>
 
           {/* Application Form */}
-          <div className="bg-background p-8 rounded-xl shadow-sm border border-border">
-            <h3 className="text-2xl font-bold mb-8">지원서 작성</h3>
+          <div className="bg-background p-5 md:p-8 rounded-xl shadow-sm border border-border">
+            <h3 className="text-2xl font-bold mb-3">지원서 작성</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-8">
+              보호자 동의 후 접수해 주세요. 접수 완료 즉시 모든 지원자에게 오디션 일정이 배정되는 것은 아니며,
+              합격자에 한해 개별 연락드립니다.
+            </p>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -272,7 +235,7 @@ export function AuditionSection() {
                   )}
                 />
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
                     name="childName"
@@ -310,7 +273,7 @@ export function AuditionSection() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
                     name="gender"
@@ -354,80 +317,20 @@ export function AuditionSection() {
                   />
                 </div>
 
-                {/* Phone + Verification */}
                 <FormField
                   control={form.control}
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>연락처 (보호자)</FormLabel>
-                      <div className="flex gap-2">
-                        <FormControl>
-                          <Input
-                            placeholder="010-0000-0000"
-                            data-testid="input-phone"
-                            disabled={phoneVerified}
-                            {...field}
-                          />
-                        </FormControl>
-                        {phoneVerified ? (
-                          <div className="flex items-center gap-1 text-sm text-green-600 font-medium whitespace-nowrap px-2">
-                            <CheckCircle2 className="w-4 h-4" />
-                            인증완료
-                          </div>
-                        ) : (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            className="whitespace-nowrap shrink-0"
-                            onClick={handleSendCode}
-                            data-testid="button-send-code"
-                          >
-                            인증번호 발송
-                          </Button>
-                        )}
-                      </div>
+                      <FormControl>
+                        <Input
+                          placeholder="010-0000-0000"
+                          data-testid="input-phone"
+                          {...field}
+                        />
+                      </FormControl>
                       <FormMessage />
-
-                      {codeSent && !phoneVerified && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          className="mt-2 space-y-2"
-                        >
-                          <div className="flex gap-2">
-                            <Input
-                              placeholder="인증번호 6자리"
-                              maxLength={6}
-                              value={codeInput}
-                              onChange={(e) => setCodeInput(e.target.value)}
-                              data-testid="input-verify-code"
-                            />
-                            <Button
-                              type="button"
-                              className="whitespace-nowrap shrink-0"
-                              onClick={handleVerifyCode}
-                              data-testid="button-verify-code"
-                            >
-                              확인
-                            </Button>
-                          </div>
-                          {codeError && (
-                            <p className="text-sm text-destructive">{codeError}</p>
-                          )}
-                          <p className="text-xs text-muted-foreground">
-                            인증번호가 오지 않으면{" "}
-                            <button
-                              type="button"
-                              className="underline"
-                              onClick={handleSendCode}
-                            >
-                              재발송
-                            </button>
-                            을 눌러주세요.
-                          </p>
-                        </motion.div>
-                      )}
                     </FormItem>
                   )}
                 />
@@ -471,20 +374,36 @@ export function AuditionSection() {
                   )}
                 />
 
+                <FormField
+                  control={form.control}
+                  name="guardianConsent"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start gap-3 rounded-lg border border-border bg-muted/40 p-4">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          data-testid="checkbox-guardian-consent"
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="text-sm font-medium leading-relaxed">
+                          보호자가 지원 사실과 개인정보 수집 및 오디션 안내 연락에 동의합니다.
+                        </FormLabel>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
                 <Button
                   type="submit"
                   className="w-full h-12 text-lg bg-primary hover:bg-primary/90"
-                  disabled={submitMutation.isPending || !phoneVerified}
+                  disabled={submitMutation.isPending}
                   data-testid="button-submit-audition"
                 >
                   {submitMutation.isPending ? "접수 중..." : "지원서 접수하기"}
                 </Button>
-
-                {!phoneVerified && (
-                  <p className="text-center text-xs text-muted-foreground">
-                    연락처 인증 후 접수가 가능합니다.
-                  </p>
-                )}
               </form>
             </Form>
           </div>

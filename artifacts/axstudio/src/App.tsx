@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import CastingPage from "@/pages/casting";
+import AdminPage from "@/pages/admin";
 
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
@@ -42,6 +43,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/casting" component={CastingPage} />
+      <Route path="/admin" component={AdminPage} />
       <Route component={NotFound} />
     </Switch>
   );

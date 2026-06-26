@@ -89,6 +89,8 @@ export function Navbar({ alwaysDark = false }: NavbarProps) {
         <button
           className={`md:hidden p-2 -mr-2 ${dark ? "text-foreground" : "text-white"}`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+          aria-expanded={mobileMenuOpen}
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>

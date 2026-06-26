@@ -7,7 +7,7 @@ export const auditionRolesTable = pgTable("audition_roles", {
   roleName: text("role_name").notNull(),
   ageRange: text("age_range").notNull(),
   description: text("description").notNull(),
-  status: text("status").notNull().default("준비중"),
+  status: text("status").notNull().default("접수중"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
