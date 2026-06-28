@@ -49,8 +49,13 @@ export function StorySection() {
             Drama Slogan
           </span>
           <h2
-            className="leading-[1.2] text-[#f4d28d] text-5xl md:text-7xl"
-            style={{ fontFamily: "'Nanum Brush Script', 'Noto Serif KR', serif" }}
+            className="leading-[1.25] text-[#f4d28d] text-4xl md:text-6xl"
+            style={{
+              fontFamily: "'Black Han Sans', 'Noto Serif KR', serif",
+              WebkitTextStroke: "1.5px #f4d28d",
+              textShadow: "3px 3px 0 rgba(0,0,0,0.45)",
+              letterSpacing: "-0.01em",
+            }}
           >
             위인은 기록되지만,
             <br />
