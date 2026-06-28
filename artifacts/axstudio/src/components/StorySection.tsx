@@ -48,7 +48,10 @@ export function StorySection() {
           >
             Drama Slogan
           </span>
-          <h2 className="font-serif font-bold leading-[1.3] text-[#f4d28d] text-3xl md:text-5xl">
+          <h2
+            className="font-bold leading-[1.35] text-[#f4d28d] text-4xl md:text-6xl"
+            style={{ fontFamily: "'Gugi', 'Noto Serif KR', serif" }}
+          >
             위인은 기록되지만,
             <br />
             민초는 기억되어야 한다.
