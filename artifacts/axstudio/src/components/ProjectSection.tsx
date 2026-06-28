@@ -98,7 +98,7 @@ export function ProjectSection() {
               <span className="text-xs font-bold tracking-widest uppercase text-primary">
                 Story World
               </span>
-              <p className="mt-2 text-2xl md:text-3xl font-serif font-bold leading-tight">
+              <p className="mt-2 text-sm sm:text-2xl lg:text-xl font-serif font-bold leading-tight whitespace-nowrap">
                 판 위에 남겨진 기억, 아이들이 다시 쓰는 역사
               </p>
               <p className="mt-3 text-sm md:text-base text-white/78 leading-relaxed max-w-xl">
