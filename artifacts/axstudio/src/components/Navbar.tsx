@@ -23,6 +23,7 @@ export function Navbar({ alwaysDark = false }: NavbarProps) {
   const navLinks = [
     { name: "소식", href: "#news" },
     { name: "프로젝트", href: "#project" },
+    { name: "기획", href: "#story" },
     { name: "게임", href: "#game" },
     { name: "캐스팅", href: "/casting" },
     { name: "회사정보", href: "#company" },

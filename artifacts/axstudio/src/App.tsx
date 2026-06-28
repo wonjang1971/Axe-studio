@@ -10,6 +10,7 @@ import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { StatusStrip } from "@/components/StatusStrip";
 import { ProjectSection } from "@/components/ProjectSection";
+import { StorySection } from "@/components/StorySection";
 import { GameSection } from "@/components/GameSection";
 import { CompanySection } from "@/components/CompanySection";
 import { SponsorshipSection } from "@/components/SponsorshipSection";
@@ -28,6 +29,7 @@ function Home() {
         <StatusStrip />
         <NewsSection />
         <ProjectSection />
+        <StorySection />
         <GameSection />
         <CompanySection />
         <SponsorshipSection />
