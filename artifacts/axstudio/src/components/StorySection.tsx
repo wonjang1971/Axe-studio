@@ -51,8 +51,7 @@ export function StorySection() {
           <h2
             className="leading-[1.25] text-[#f4d28d] text-4xl md:text-6xl"
             style={{
-              fontFamily: "'Black Han Sans', 'Noto Serif KR', serif",
-              WebkitTextStroke: "1.5px #f4d28d",
+              fontFamily: "'KCC-Sonkeechung', 'Noto Serif KR', serif",
               textShadow: "3px 3px 0 rgba(0,0,0,0.45)",
               letterSpacing: "-0.01em",
             }}
