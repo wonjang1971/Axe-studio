@@ -49,16 +49,18 @@ export function StorySection() {
             Drama Slogan
           </span>
           <h2
-            className="leading-[1.25] text-[#f4d28d] text-4xl md:text-6xl"
+            className="leading-[1.3] text-[#f4d28d] text-4xl md:text-6xl"
             style={{
-              fontFamily: "'KCC-Sonkeechung', 'Noto Serif KR', serif",
+              fontFamily: "'Shilla Culture', 'Noto Serif KR', serif",
               textShadow: "3px 3px 0 rgba(0,0,0,0.45)",
               letterSpacing: "-0.01em",
             }}
           >
             위인은 기록되지만,
             <br />
-            민초는 기억되어야 한다.
+            민초는
+            <br />
+            기억되어야 한다.
           </h2>
           <p className="mt-6 text-base md:text-lg text-white/65 leading-relaxed">
             역사를 만든 건 위인이 아닌, 민초들이다.
