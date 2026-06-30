@@ -29,13 +29,24 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { characterProfiles } from "@/data/characterProfiles";
 
 export function AuditionSection() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { data: roles, isLoading } = useListAuditionRoles();
   const submitMutation = useSubmitAuditionApplication();
+  const [openRole, setOpenRole] = useState<string | null>(null);
+  const activeProfile = openRole ? characterProfiles[openRole] : null;
 
   const form = useForm<AuditionFormValues>({
     resolver: zodResolver(auditionSchema),
@@ -112,14 +123,32 @@ export function AuditionSection() {
                   const mainDesc = parts[0];
                   const reqs = parts.slice(1);
                   const isLead = idx === 0;
+                  const hasProfile = Boolean(characterProfiles[role.roleName]);
                   return (
                     <motion.div
                       key={role.id}
                       initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
+                      onClick={
+                        hasProfile ? () => setOpenRole(role.roleName) : undefined
+                      }
+                      role={hasProfile ? "button" : undefined}
+                      tabIndex={hasProfile ? 0 : undefined}
+                      onKeyDown={
+                        hasProfile
+                          ? (e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                setOpenRole(role.roleName);
+                              }
+                            }
+                          : undefined
+                      }
                       data-testid={`card-role-${role.id}`}
                       className={`p-5 md:p-6 border rounded-lg transition-colors bg-background ${
+                        hasProfile ? "cursor-pointer" : ""
+                      } ${
                         isLead
                           ? "border-primary/40 hover:border-primary ring-1 ring-primary/10"
                           : "border-border hover:border-primary/50"
@@ -165,6 +194,12 @@ export function AuditionSection() {
                             </li>
                           ))}
                         </ul>
+                      )}
+                      {hasProfile && (
+                        <div className="mt-4 pt-3 border-t border-border flex items-center justify-end gap-1 text-xs font-semibold text-primary">
+                          캐릭터 상세 보기
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </div>
                       )}
                     </motion.div>
                   );
@@ -409,6 +444,52 @@ export function AuditionSection() {
           </div>
         </div>
       </div>
+
+      <Dialog
+        open={openRole !== null}
+        onOpenChange={(open) => !open && setOpenRole(null)}
+      >
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          {activeProfile && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-serif font-bold text-foreground">
+                  {openRole}
+                </DialogTitle>
+                <DialogDescription className="text-base text-foreground/80 leading-relaxed pt-2">
+                  {activeProfile.tagline}
+                </DialogDescription>
+              </DialogHeader>
+              {activeProfile.hashtags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {activeProfile.hashtags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs font-medium px-2.5 py-1 rounded-full bg-primary/10 text-primary"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div className="mt-4 space-y-5">
+                {activeProfile.sections.map((sec, i) => (
+                  <div key={i}>
+                    {sec.heading && (
+                      <h4 className="text-sm font-bold text-primary mb-1.5">
+                        {sec.heading}
+                      </h4>
+                    )}
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {sec.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
