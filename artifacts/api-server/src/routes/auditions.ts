@@ -4,8 +4,14 @@ import { SubmitAuditionApplicationBody } from "@workspace/api-zod";
 
 const router = Router();
 
-const defaultAuditionRoles = [
+// Canonical audition roles are the single source of truth for display content
+// (name, age, description, status). The database only supplies the stable `id`
+// used as the foreign key for submitted applications. This keeps the live
+// (production) site identical to the preview even when the production database
+// still holds legacy role rows, without mutating production data.
+const canonicalAuditionRoles = [
   {
+    matchKeys: ["최승경", "승경"],
     roleName: "최승경",
     ageRange: "남 / 12세",
     description:
@@ -13,6 +19,7 @@ const defaultAuditionRoles = [
     status: "접수중",
   },
   {
+    matchKeys: ["윤미래", "미래"],
     roleName: "윤미래",
     ageRange: "여 / 12세",
     description:
@@ -20,6 +27,7 @@ const defaultAuditionRoles = [
     status: "접수중",
   },
   {
+    matchKeys: ["최정경", "정경"],
     roleName: "최정경",
     ageRange: "남 / 13세",
     description:
@@ -27,6 +35,7 @@ const defaultAuditionRoles = [
     status: "접수중",
   },
   {
+    matchKeys: ["박석현", "석현"],
     roleName: "박석현",
     ageRange: "남 / 14세",
     description:
@@ -34,6 +43,10 @@ const defaultAuditionRoles = [
     status: "접수중",
   },
 ];
+
+const defaultAuditionRoles = canonicalAuditionRoles.map(
+  ({ matchKeys: _matchKeys, ...role }) => role
+);
 
 router.get("/auditions/roles", async (req, res) => {
   try {
@@ -43,13 +56,29 @@ router.get("/auditions/roles", async (req, res) => {
       roles = await db.insert(auditionRolesTable).values(defaultAuditionRoles).returning();
     }
 
-    res.json(roles.map(r => ({
-      id: r.id,
-      roleName: r.roleName,
-      ageRange: r.ageRange,
-      description: r.description,
-      status: r.status,
-    })));
+    // Map each canonical role to a DB row (matched by character name) so the
+    // response always uses canonical display content but keeps the real DB id.
+    const usedIds = new Set<number>();
+    const response = canonicalAuditionRoles.map((canonical) => {
+      let match = roles.find(
+        (r) =>
+          !usedIds.has(r.id) &&
+          canonical.matchKeys.some((key) => r.roleName.includes(key))
+      );
+      if (!match) {
+        match = roles.find((r) => !usedIds.has(r.id));
+      }
+      if (match) usedIds.add(match.id);
+      return {
+        id: match ? match.id : -1,
+        roleName: canonical.roleName,
+        ageRange: canonical.ageRange,
+        description: canonical.description,
+        status: canonical.status,
+      };
+    });
+
+    res.json(response.filter((r) => r.id !== -1));
   } catch (err) {
     req.log.error({ err }, "Failed to list audition roles");
     res.status(500).json({ error: "Internal server error" });

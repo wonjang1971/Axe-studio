@@ -1,0 +1,1 @@
+- [Dev vs prod DB data drift](dev-prod-db-data-sync.md) — publish migrates schema, NOT data; preview≠domain when DB rows differ. Make code canonical, use DB only for id.
