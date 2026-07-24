@@ -23,6 +23,7 @@ import type {
   AuditionApplication,
   AuditionApplicationInput,
   AuditionRole,
+  AuditionRoleInput,
   HealthStatus,
   SiteStats,
   SponsorshipInquiry,
@@ -195,6 +196,77 @@ export function useListAuditionRoles<TData = Awaited<ReturnType<typeof listAudit
 
 
 
+
+export const getCreateAuditionRoleUrl = () => {
+
+
+
+
+  return `/api/auditions/roles`
+}
+
+/**
+ * @summary Create a new audition role (admin)
+ */
+export const createAuditionRole = async (auditionRoleInput: AuditionRoleInput, options?: RequestInit): Promise<AuditionRole> => {
+
+  return customFetch<AuditionRole>(getCreateAuditionRoleUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      auditionRoleInput,)
+  }
+);}
+
+
+
+
+export const getCreateAuditionRoleMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAuditionRole>>, TError,{data: BodyType<AuditionRoleInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createAuditionRole>>, TError,{data: BodyType<AuditionRoleInput>}, TContext> => {
+
+const mutationKey = ['createAuditionRole'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAuditionRole>>, {data: BodyType<AuditionRoleInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAuditionRole(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAuditionRoleMutationResult = NonNullable<Awaited<ReturnType<typeof createAuditionRole>>>
+    export type CreateAuditionRoleMutationBody = BodyType<AuditionRoleInput>
+    export type CreateAuditionRoleMutationError = ErrorType<void>
+
+    /**
+ * @summary Create a new audition role (admin)
+ */
+export const useCreateAuditionRole = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAuditionRole>>, TError,{data: BodyType<AuditionRoleInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createAuditionRole>>,
+        TError,
+        {data: BodyType<AuditionRoleInput>},
+        TContext
+      > => {
+      return useMutation(getCreateAuditionRoleMutationOptions(options));
+    }
 
 export const getSubmitAuditionApplicationUrl = () => {
 

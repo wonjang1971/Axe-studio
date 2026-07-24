@@ -45,6 +45,26 @@ paths:
                 items:
                   $ref: "#/components/schemas/AuditionRole"
 
+    post:
+      operationId: createAuditionRole
+      tags: [auditions]
+      summary: Create a new audition role (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuditionRoleInput"
+      responses:
+        "201":
+          description: Role created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditionRole"
+        "400":
+          description: Validation error
+
   /auditions/apply:
     post:
       operationId: submitAuditionApplication
@@ -151,6 +171,23 @@ components:
           type: string
         description:
           type: string
+        status:
+          type: string
+          enum: [준비중, 접수중, 마감]
+
+    AuditionRoleInput:
+      type: object
+      required: [roleName, ageRange, description, status]
+      properties:
+        roleName:
+          type: string
+          minLength: 1
+        ageRange:
+          type: string
+          minLength: 1
+        description:
+          type: string
+          minLength: 1
         status:
           type: string
           enum: [준비중, 접수중, 마감]

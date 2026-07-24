@@ -26,6 +26,25 @@ export interface AuditionRole {
   status: AuditionRoleStatus;
 }
 
+export type AuditionRoleInputStatus = typeof AuditionRoleInputStatus[keyof typeof AuditionRoleInputStatus];
+
+
+export const AuditionRoleInputStatus = {
+  준비중: '준비중',
+  접수중: '접수중',
+  마감: '마감',
+} as const;
+
+export interface AuditionRoleInput {
+  /** @minLength 1 */
+  roleName: string;
+  /** @minLength 1 */
+  ageRange: string;
+  /** @minLength 1 */
+  description: string;
+  status: AuditionRoleInputStatus;
+}
+
 export interface AuditionApplicationInput {
   roleId: number;
   childName: string;

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { db, sponsorshipInquiriesTable } from "@workspace/db";
 import { SubmitSponsorshipInquiryBody } from "@workspace/api-zod";
+import { requireAdmin } from "../middlewares/adminAuth";
 
 const router = Router();
 
@@ -37,7 +38,7 @@ router.post("/sponsorships", async (req, res): Promise<void> => {
   }
 });
 
-router.get("/sponsorships", async (req, res) => {
+router.get("/sponsorships", requireAdmin, async (req, res) => {
   try {
     const inquiries = await db.select().from(sponsorshipInquiriesTable).orderBy(sponsorshipInquiriesTable.createdAt);
     res.json(inquiries.map(i => ({

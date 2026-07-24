@@ -4,14 +4,26 @@ import {
   useListAuditionApplications,
   useListAuditionRoles,
   useListSponsorshipInquiries,
+  useCreateAuditionRole,
   getListAuditionApplicationsQueryKey,
   getListAuditionRolesQueryKey,
   getListSponsorshipInquiriesQueryKey,
+  setAuthTokenGetter,
 } from "@workspace/api-client-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || "axe2026";
 
@@ -33,6 +45,15 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [unlocked, setUnlocked] = useState(false);
   const [error, setError] = useState("");
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const createRoleMutation = useCreateAuditionRole();
+  const [newRole, setNewRole] = useState({
+    roleName: "",
+    ageRange: "",
+    description: "",
+    status: "접수중" as "준비중" | "접수중" | "마감",
+  });
 
   const { data: roles = [] } = useListAuditionRoles({
     query: { enabled: unlocked, queryKey: getListAuditionRolesQueryKey() },
@@ -49,6 +70,45 @@ export default function AdminPage() {
     [roles]
   );
 
+  const handleAddRole = (event: FormEvent) => {
+    event.preventDefault();
+    if (!newRole.roleName.trim() || !newRole.ageRange.trim() || !newRole.description.trim()) {
+      toast({
+        title: "입력 확인",
+        description: "배역 이름, 나이, 설명을 모두 입력해주세요.",
+        variant: "destructive",
+      });
+      return;
+    }
+    createRoleMutation.mutate(
+      {
+        data: {
+          roleName: newRole.roleName.trim(),
+          ageRange: newRole.ageRange.trim(),
+          description: newRole.description.trim(),
+          status: newRole.status,
+        },
+      },
+      {
+        onSuccess: () => {
+          toast({
+            title: "배역 추가 완료",
+            description: `'${newRole.roleName.trim()}' 배역이 추가되었습니다.`,
+          });
+          setNewRole({ roleName: "", ageRange: "", description: "", status: "접수중" });
+          queryClient.invalidateQueries({ queryKey: getListAuditionRolesQueryKey() });
+        },
+        onError: () => {
+          toast({
+            title: "배역 추가 실패",
+            description: "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+            variant: "destructive",
+          });
+        },
+      }
+    );
+  };
+
   const handleLogin = (event: FormEvent) => {
     event.preventDefault();
     if (password !== ADMIN_PASSWORD) {
@@ -56,6 +116,7 @@ export default function AdminPage() {
       return;
     }
     setError("");
+    setAuthTokenGetter(() => password);
     setUnlocked(true);
   };
 
@@ -149,6 +210,113 @@ export default function AdminPage() {
                   <b className="block text-3xl text-primary mt-2">{inquiries.length}건</b>
                 </div>
               </div>
+
+              <section className="bg-card border border-border rounded-xl p-5 md:p-6">
+                <h2 className="text-2xl font-bold mb-2">배역 추가</h2>
+                <p className="text-sm text-muted-foreground mb-5">
+                  새 배역을 추가하면 캐스팅 페이지의 모집 배역 목록에 바로 표시됩니다.
+                </p>
+                <form onSubmit={handleAddRole} className="grid gap-4 max-w-2xl">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-1.5">
+                        배역 이름
+                      </label>
+                      <Input
+                        value={newRole.roleName}
+                        onChange={(event) =>
+                          setNewRole((prev) => ({ ...prev, roleName: event.target.value }))
+                        }
+                        placeholder="예: 조연 - 홍길동"
+                        data-testid="input-new-role-name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-1.5">
+                        모집 나이
+                      </label>
+                      <Input
+                        value={newRole.ageRange}
+                        onChange={(event) =>
+                          setNewRole((prev) => ({ ...prev, ageRange: event.target.value }))
+                        }
+                        placeholder="예: 10~13세"
+                        data-testid="input-new-role-age"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-1.5">
+                      배역 설명
+                    </label>
+                    <Textarea
+                      value={newRole.description}
+                      onChange={(event) =>
+                        setNewRole((prev) => ({ ...prev, description: event.target.value }))
+                      }
+                      placeholder="배역 소개와 모집 조건을 적어주세요."
+                      rows={4}
+                      data-testid="input-new-role-description"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-1.5">
+                        접수 상태
+                      </label>
+                      <Select
+                        value={newRole.status}
+                        onValueChange={(value) =>
+                          setNewRole((prev) => ({
+                            ...prev,
+                            status: value as "준비중" | "접수중" | "마감",
+                          }))
+                        }
+                      >
+                        <SelectTrigger data-testid="select-new-role-status">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="준비중">준비중</SelectItem>
+                          <SelectItem value="접수중">접수중</SelectItem>
+                          <SelectItem value="마감">마감</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button
+                      type="submit"
+                      disabled={createRoleMutation.isPending}
+                      data-testid="button-add-role"
+                    >
+                      {createRoleMutation.isPending ? "추가 중..." : "배역 추가"}
+                    </Button>
+                  </div>
+                </form>
+
+                <div className="mt-8">
+                  <h3 className="text-lg font-bold mb-3">현재 배역 목록</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-border text-left text-muted-foreground">
+                          <th className="py-3 pr-4">배역</th>
+                          <th className="py-3 pr-4">모집 나이</th>
+                          <th className="py-3 pr-4">상태</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {roles.map((role) => (
+                          <tr key={role.id} className="border-b border-border/60">
+                            <td className="py-3 pr-4 font-medium">{role.roleName}</td>
+                            <td className="py-3 pr-4">{role.ageRange}</td>
+                            <td className="py-3 pr-4">{role.status}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
 
               <section className="bg-card border border-border rounded-xl p-5 md:p-6">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">

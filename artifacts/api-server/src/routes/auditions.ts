@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { db, auditionRolesTable, auditionApplicationsTable } from "@workspace/db";
-import { SubmitAuditionApplicationBody } from "@workspace/api-zod";
+import { SubmitAuditionApplicationBody, CreateAuditionRoleBody } from "@workspace/api-zod";
+import { requireAdmin } from "../middlewares/adminAuth";
 
 const router = Router();
 
@@ -58,29 +59,72 @@ router.get("/auditions/roles", async (req, res) => {
 
     // Map each canonical role to a DB row (matched by character name) so the
     // response always uses canonical display content but keeps the real DB id.
+    // Legacy rows (e.g. old production names) get canonical content; any other
+    // rows (e.g. roles added via the admin page) are returned as-is afterwards.
     const usedIds = new Set<number>();
-    const response = canonicalAuditionRoles.map((canonical) => {
-      let match = roles.find(
+    const response = canonicalAuditionRoles.flatMap((canonical) => {
+      const match = roles.find(
         (r) =>
           !usedIds.has(r.id) &&
           canonical.matchKeys.some((key) => r.roleName.includes(key))
       );
-      if (!match) {
-        match = roles.find((r) => !usedIds.has(r.id));
-      }
-      if (match) usedIds.add(match.id);
-      return {
-        id: match ? match.id : -1,
-        roleName: canonical.roleName,
-        ageRange: canonical.ageRange,
-        description: canonical.description,
-        status: canonical.status,
-      };
+      if (!match) return [];
+      usedIds.add(match.id);
+      return [
+        {
+          id: match.id,
+          roleName: canonical.roleName,
+          ageRange: canonical.ageRange,
+          description: canonical.description,
+          status: canonical.status,
+        },
+      ];
     });
 
-    res.json(response.filter((r) => r.id !== -1));
+    const extraRoles = roles
+      .filter((r) => !usedIds.has(r.id))
+      .map((r) => ({
+        id: r.id,
+        roleName: r.roleName,
+        ageRange: r.ageRange,
+        description: r.description,
+        status: r.status,
+      }));
+
+    res.json([...response, ...extraRoles]);
   } catch (err) {
     req.log.error({ err }, "Failed to list audition roles");
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/auditions/roles", requireAdmin, async (req, res): Promise<void> => {
+  const parsed = CreateAuditionRoleBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: "Validation error", details: parsed.error.issues });
+    return;
+  }
+
+  try {
+    const [role] = await db
+      .insert(auditionRolesTable)
+      .values({
+        roleName: parsed.data.roleName,
+        ageRange: parsed.data.ageRange,
+        description: parsed.data.description,
+        status: parsed.data.status,
+      })
+      .returning();
+
+    res.status(201).json({
+      id: role.id,
+      roleName: role.roleName,
+      ageRange: role.ageRange,
+      description: role.description,
+      status: role.status,
+    });
+  } catch (err) {
+    req.log.error({ err }, "Failed to create audition role");
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -122,7 +166,7 @@ router.post("/auditions/apply", async (req, res): Promise<void> => {
   }
 });
 
-router.get("/auditions/applications", async (req, res) => {
+router.get("/auditions/applications", requireAdmin, async (req, res) => {
   try {
     const applications = await db.select().from(auditionApplicationsTable).orderBy(auditionApplicationsTable.createdAt);
     res.json(applications.map(a => ({

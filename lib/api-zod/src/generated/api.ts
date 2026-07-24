@@ -31,6 +31,22 @@ export const ListAuditionRolesResponse = zod.array(ListAuditionRolesResponseItem
 
 
 /**
+ * @summary Create a new audition role (admin)
+ */
+
+
+
+
+
+export const CreateAuditionRoleBody = zod.object({
+  "roleName": zod.string().min(1),
+  "ageRange": zod.string().min(1),
+  "description": zod.string().min(1),
+  "status": zod.enum(['준비중', '접수중', '마감'])
+})
+
+
+/**
  * @summary Submit an audition application
  */
 export const SubmitAuditionApplicationBody = zod.object({
