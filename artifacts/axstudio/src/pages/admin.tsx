@@ -5,6 +5,8 @@ import {
   useListAuditionRoles,
   useListSponsorshipInquiries,
   useCreateAuditionRole,
+  useUpdateAuditionRole,
+  useDeleteAuditionRole,
   getListAuditionApplicationsQueryKey,
   getListAuditionRolesQueryKey,
   getListSponsorshipInquiriesQueryKey,
@@ -48,6 +50,9 @@ export default function AdminPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const createRoleMutation = useCreateAuditionRole();
+  const updateRoleMutation = useUpdateAuditionRole();
+  const deleteRoleMutation = useDeleteAuditionRole();
+  const [editingRoleId, setEditingRoleId] = useState<number | null>(null);
   const [newRole, setNewRole] = useState({
     roleName: "",
     ageRange: "",
@@ -70,7 +75,12 @@ export default function AdminPage() {
     [roles]
   );
 
-  const handleAddRole = (event: FormEvent) => {
+  const resetRoleForm = () => {
+    setEditingRoleId(null);
+    setNewRole({ roleName: "", ageRange: "", description: "", status: "접수중" });
+  };
+
+  const handleSubmitRole = (event: FormEvent) => {
     event.preventDefault();
     if (!newRole.roleName.trim() || !newRole.ageRange.trim() || !newRole.description.trim()) {
       toast({
@@ -80,28 +90,91 @@ export default function AdminPage() {
       });
       return;
     }
+
+    const data = {
+      roleName: newRole.roleName.trim(),
+      ageRange: newRole.ageRange.trim(),
+      description: newRole.description.trim(),
+      status: newRole.status,
+    };
+
+    if (editingRoleId !== null) {
+      updateRoleMutation.mutate(
+        { roleId: editingRoleId, data },
+        {
+          onSuccess: () => {
+            toast({
+              title: "배역 수정 완료",
+              description: `'${data.roleName}' 배역이 수정되었습니다.`,
+            });
+            resetRoleForm();
+            queryClient.invalidateQueries({ queryKey: getListAuditionRolesQueryKey() });
+          },
+          onError: () => {
+            toast({
+              title: "배역 수정 실패",
+              description: "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+              variant: "destructive",
+            });
+          },
+        }
+      );
+      return;
+    }
+
     createRoleMutation.mutate(
-      {
-        data: {
-          roleName: newRole.roleName.trim(),
-          ageRange: newRole.ageRange.trim(),
-          description: newRole.description.trim(),
-          status: newRole.status,
-        },
-      },
+      { data },
       {
         onSuccess: () => {
           toast({
             title: "배역 추가 완료",
-            description: `'${newRole.roleName.trim()}' 배역이 추가되었습니다.`,
+            description: `'${data.roleName}' 배역이 추가되었습니다.`,
           });
-          setNewRole({ roleName: "", ageRange: "", description: "", status: "접수중" });
+          resetRoleForm();
           queryClient.invalidateQueries({ queryKey: getListAuditionRolesQueryKey() });
         },
         onError: () => {
           toast({
             title: "배역 추가 실패",
             description: "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+            variant: "destructive",
+          });
+        },
+      }
+    );
+  };
+
+  const handleEditRole = (role: (typeof roles)[number]) => {
+    setEditingRoleId(role.id);
+    setNewRole({
+      roleName: role.roleName,
+      ageRange: role.ageRange,
+      description: role.description,
+      status: role.status,
+    });
+  };
+
+  const handleDeleteRole = (role: (typeof roles)[number]) => {
+    if (!window.confirm(`'${role.roleName}' 배역을 삭제할까요?`)) return;
+    deleteRoleMutation.mutate(
+      { roleId: role.id },
+      {
+        onSuccess: () => {
+          toast({
+            title: "배역 삭제 완료",
+            description: `'${role.roleName}' 배역이 삭제되었습니다.`,
+          });
+          if (editingRoleId === role.id) resetRoleForm();
+          queryClient.invalidateQueries({ queryKey: getListAuditionRolesQueryKey() });
+        },
+        onError: (err) => {
+          const conflict =
+            typeof err === "object" && err !== null && "status" in err && err.status === 409;
+          toast({
+            title: "배역 삭제 실패",
+            description: conflict
+              ? "이미 접수된 지원서가 있는 배역은 삭제할 수 없습니다."
+              : "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
             variant: "destructive",
           });
         },
@@ -212,11 +285,15 @@ export default function AdminPage() {
               </div>
 
               <section className="bg-card border border-border rounded-xl p-5 md:p-6">
-                <h2 className="text-2xl font-bold mb-2">배역 추가</h2>
+                <h2 className="text-2xl font-bold mb-2">
+                  {editingRoleId !== null ? "배역 수정" : "배역 추가"}
+                </h2>
                 <p className="text-sm text-muted-foreground mb-5">
-                  새 배역을 추가하면 캐스팅 페이지의 모집 배역 목록에 바로 표시됩니다.
+                  {editingRoleId !== null
+                    ? "아래 내용을 수정한 뒤 저장을 누르세요."
+                    : "새 배역을 추가하면 캐스팅 페이지의 모집 배역 목록에 바로 표시됩니다."}
                 </p>
-                <form onSubmit={handleAddRole} className="grid gap-4 max-w-2xl">
+                <form onSubmit={handleSubmitRole} className="grid gap-4 max-w-2xl">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-1.5">
@@ -283,13 +360,32 @@ export default function AdminPage() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <Button
-                      type="submit"
-                      disabled={createRoleMutation.isPending}
-                      data-testid="button-add-role"
-                    >
-                      {createRoleMutation.isPending ? "추가 중..." : "배역 추가"}
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        type="submit"
+                        className="flex-1"
+                        disabled={createRoleMutation.isPending || updateRoleMutation.isPending}
+                        data-testid="button-add-role"
+                      >
+                        {editingRoleId !== null
+                          ? updateRoleMutation.isPending
+                            ? "저장 중..."
+                            : "수정 저장"
+                          : createRoleMutation.isPending
+                            ? "추가 중..."
+                            : "배역 추가"}
+                      </Button>
+                      {editingRoleId !== null && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={resetRoleForm}
+                          data-testid="button-cancel-edit"
+                        >
+                          취소
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </form>
 
@@ -302,6 +398,7 @@ export default function AdminPage() {
                           <th className="py-3 pr-4">배역</th>
                           <th className="py-3 pr-4">모집 나이</th>
                           <th className="py-3 pr-4">상태</th>
+                          <th className="py-3 pr-4">관리</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -310,6 +407,29 @@ export default function AdminPage() {
                             <td className="py-3 pr-4 font-medium">{role.roleName}</td>
                             <td className="py-3 pr-4">{role.ageRange}</td>
                             <td className="py-3 pr-4">{role.status}</td>
+                            <td className="py-3 pr-4">
+                              <div className="flex gap-2">
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleEditRole(role)}
+                                  data-testid={`button-edit-role-${role.id}`}
+                                >
+                                  수정
+                                </Button>
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="destructive"
+                                  disabled={deleteRoleMutation.isPending}
+                                  onClick={() => handleDeleteRole(role)}
+                                  data-testid={`button-delete-role-${role.id}`}
+                                >
+                                  삭제
+                                </Button>
+                              </div>
+                            </td>
                           </tr>
                         ))}
                       </tbody>

@@ -1,18 +1,21 @@
 import { Router } from "express";
+import { eq } from "drizzle-orm";
 import { db, auditionRolesTable, auditionApplicationsTable } from "@workspace/db";
-import { SubmitAuditionApplicationBody, CreateAuditionRoleBody } from "@workspace/api-zod";
+import {
+  SubmitAuditionApplicationBody,
+  CreateAuditionRoleBody,
+  UpdateAuditionRoleBody,
+} from "@workspace/api-zod";
 import { requireAdmin } from "../middlewares/adminAuth";
 
 const router = Router();
 
-// Canonical audition roles are the single source of truth for display content
-// (name, age, description, status). The database only supplies the stable `id`
-// used as the foreign key for submitted applications. This keeps the live
-// (production) site identical to the preview even when the production database
-// still holds legacy role rows, without mutating production data.
+// Canonical audition roles: used to seed an empty database and to migrate
+// known legacy production rows (exact name match only) to current content.
+// After migration the database is the single source of truth, so roles can be
+// freely added/edited/deleted from the admin page.
 const canonicalAuditionRoles = [
   {
-    matchKeys: ["최승경", "승경"],
     roleName: "최승경",
     ageRange: "남 / 12세",
     description:
@@ -20,7 +23,6 @@ const canonicalAuditionRoles = [
     status: "접수중",
   },
   {
-    matchKeys: ["윤미래", "미래"],
     roleName: "윤미래",
     ageRange: "여 / 12세",
     description:
@@ -28,7 +30,6 @@ const canonicalAuditionRoles = [
     status: "접수중",
   },
   {
-    matchKeys: ["최정경", "정경"],
     roleName: "최정경",
     ageRange: "남 / 13세",
     description:
@@ -36,7 +37,6 @@ const canonicalAuditionRoles = [
     status: "접수중",
   },
   {
-    matchKeys: ["박석현", "석현"],
     roleName: "박석현",
     ageRange: "남 / 14세",
     description:
@@ -45,53 +45,59 @@ const canonicalAuditionRoles = [
   },
 ];
 
-const defaultAuditionRoles = canonicalAuditionRoles.map(
-  ({ matchKeys: _matchKeys, ...role }) => role
+// Known legacy production role names (exact match) → canonical content.
+const legacyRoleNameToCanonical = new Map(
+  [
+    ["주연 1 (최승경)", "최승경"],
+    ["주연 2 (최정경)", "최정경"],
+    ["주조연 1 (미래)", "윤미래"],
+    ["주조연 2 (석현)", "박석현"],
+  ].map(([legacyName, canonicalName]) => [
+    legacyName,
+    canonicalAuditionRoles.find((c) => c.roleName === canonicalName)!,
+  ])
 );
+
+// Runs once at server startup: seeds an empty roles table and migrates known
+// legacy rows (matched by exact legacy name) to canonical content. Never runs
+// as part of request handling, so admin edits are never overwritten and GET
+// stays read-only.
+export async function seedAndMigrateAuditionRoles(): Promise<void> {
+  const roles = await db.select().from(auditionRolesTable).orderBy(auditionRolesTable.id);
+
+  if (roles.length === 0) {
+    await db.insert(auditionRolesTable).values(canonicalAuditionRoles);
+    return;
+  }
+
+  for (const role of roles) {
+    const canonical = legacyRoleNameToCanonical.get(role.roleName);
+    if (!canonical) continue;
+    await db
+      .update(auditionRolesTable)
+      .set({
+        roleName: canonical.roleName,
+        ageRange: canonical.ageRange,
+        description: canonical.description,
+        status: canonical.status,
+      })
+      .where(eq(auditionRolesTable.id, role.id));
+  }
+}
 
 router.get("/auditions/roles", async (req, res) => {
   try {
-    let roles = await db.select().from(auditionRolesTable).orderBy(auditionRolesTable.id);
+    const roles = await db.select().from(auditionRolesTable).orderBy(auditionRolesTable.id);
 
-    if (roles.length === 0) {
-      roles = await db.insert(auditionRolesTable).values(defaultAuditionRoles).returning();
-    }
-
-    // Map each canonical role to a DB row (matched by character name) so the
-    // response always uses canonical display content but keeps the real DB id.
-    // Legacy rows (e.g. old production names) get canonical content; any other
-    // rows (e.g. roles added via the admin page) are returned as-is afterwards.
-    const usedIds = new Set<number>();
-    const response = canonicalAuditionRoles.flatMap((canonical) => {
-      const match = roles.find(
-        (r) =>
-          !usedIds.has(r.id) &&
-          canonical.matchKeys.some((key) => r.roleName.includes(key))
-      );
-      if (!match) return [];
-      usedIds.add(match.id);
-      return [
-        {
-          id: match.id,
-          roleName: canonical.roleName,
-          ageRange: canonical.ageRange,
-          description: canonical.description,
-          status: canonical.status,
-        },
-      ];
-    });
-
-    const extraRoles = roles
-      .filter((r) => !usedIds.has(r.id))
-      .map((r) => ({
+    res.json(
+      roles.map((r) => ({
         id: r.id,
         roleName: r.roleName,
         ageRange: r.ageRange,
         description: r.description,
         status: r.status,
-      }));
-
-    res.json([...response, ...extraRoles]);
+      }))
+    );
   } catch (err) {
     req.log.error({ err }, "Failed to list audition roles");
     res.status(500).json({ error: "Internal server error" });
@@ -125,6 +131,87 @@ router.post("/auditions/roles", requireAdmin, async (req, res): Promise<void> =>
     });
   } catch (err) {
     req.log.error({ err }, "Failed to create audition role");
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.put("/auditions/roles/:roleId", requireAdmin, async (req, res): Promise<void> => {
+  const roleId = Number(req.params.roleId);
+  if (!Number.isInteger(roleId)) {
+    res.status(400).json({ error: "Invalid role id" });
+    return;
+  }
+
+  const parsed = UpdateAuditionRoleBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: "Validation error", details: parsed.error.issues });
+    return;
+  }
+
+  try {
+    const [role] = await db
+      .update(auditionRolesTable)
+      .set({
+        roleName: parsed.data.roleName,
+        ageRange: parsed.data.ageRange,
+        description: parsed.data.description,
+        status: parsed.data.status,
+      })
+      .where(eq(auditionRolesTable.id, roleId))
+      .returning();
+
+    if (!role) {
+      res.status(404).json({ error: "Role not found" });
+      return;
+    }
+
+    res.json({
+      id: role.id,
+      roleName: role.roleName,
+      ageRange: role.ageRange,
+      description: role.description,
+      status: role.status,
+    });
+  } catch (err) {
+    req.log.error({ err }, "Failed to update audition role");
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.delete("/auditions/roles/:roleId", requireAdmin, async (req, res): Promise<void> => {
+  const roleId = Number(req.params.roleId);
+  if (!Number.isInteger(roleId)) {
+    res.status(400).json({ error: "Invalid role id" });
+    return;
+  }
+
+  try {
+    const applications = await db
+      .select({ id: auditionApplicationsTable.id })
+      .from(auditionApplicationsTable)
+      .where(eq(auditionApplicationsTable.roleId, roleId))
+      .limit(1);
+
+    if (applications.length > 0) {
+      res.status(409).json({
+        error: "이미 접수된 지원서가 있는 배역은 삭제할 수 없습니다.",
+      });
+      return;
+    }
+
+    const [deleted] = await db
+      .delete(auditionRolesTable)
+      .where(eq(auditionRolesTable.id, roleId))
+      .returning();
+
+    if (!deleted) {
+      res.status(404).json({ error: "Role not found" });
+      return;
+    }
+
+    res.status(204).end();
+  } catch (err) {
+    req.log.error({ err }, "Failed to delete audition role");
     res.status(500).json({ error: "Internal server error" });
   }
 });

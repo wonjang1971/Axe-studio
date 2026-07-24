@@ -268,6 +268,148 @@ export const useCreateAuditionRole = <TError = ErrorType<void>,
       return useMutation(getCreateAuditionRoleMutationOptions(options));
     }
 
+export const getUpdateAuditionRoleUrl = (roleId: number,) => {
+
+
+
+
+  return `/api/auditions/roles/${roleId}`
+}
+
+/**
+ * @summary Update an audition role (admin)
+ */
+export const updateAuditionRole = async (roleId: number,
+    auditionRoleInput: AuditionRoleInput, options?: RequestInit): Promise<AuditionRole> => {
+
+  return customFetch<AuditionRole>(getUpdateAuditionRoleUrl(roleId),
+  {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      auditionRoleInput,)
+  }
+);}
+
+
+
+
+export const getUpdateAuditionRoleMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAuditionRole>>, TError,{roleId: number;data: BodyType<AuditionRoleInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateAuditionRole>>, TError,{roleId: number;data: BodyType<AuditionRoleInput>}, TContext> => {
+
+const mutationKey = ['updateAuditionRole'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAuditionRole>>, {roleId: number;data: BodyType<AuditionRoleInput>}> = (props) => {
+          const {roleId,data} = props ?? {};
+
+          return  updateAuditionRole(roleId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAuditionRoleMutationResult = NonNullable<Awaited<ReturnType<typeof updateAuditionRole>>>
+    export type UpdateAuditionRoleMutationBody = BodyType<AuditionRoleInput>
+    export type UpdateAuditionRoleMutationError = ErrorType<void>
+
+    /**
+ * @summary Update an audition role (admin)
+ */
+export const useUpdateAuditionRole = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAuditionRole>>, TError,{roleId: number;data: BodyType<AuditionRoleInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateAuditionRole>>,
+        TError,
+        {roleId: number;data: BodyType<AuditionRoleInput>},
+        TContext
+      > => {
+      return useMutation(getUpdateAuditionRoleMutationOptions(options));
+    }
+
+export const getDeleteAuditionRoleUrl = (roleId: number,) => {
+
+
+
+
+  return `/api/auditions/roles/${roleId}`
+}
+
+/**
+ * @summary Delete an audition role (admin)
+ */
+export const deleteAuditionRole = async (roleId: number, options?: RequestInit): Promise<void> => {
+
+  return customFetch<void>(getDeleteAuditionRoleUrl(roleId),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+export const getDeleteAuditionRoleMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAuditionRole>>, TError,{roleId: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAuditionRole>>, TError,{roleId: number}, TContext> => {
+
+const mutationKey = ['deleteAuditionRole'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAuditionRole>>, {roleId: number}> = (props) => {
+          const {roleId} = props ?? {};
+
+          return  deleteAuditionRole(roleId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAuditionRoleMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAuditionRole>>>
+
+    export type DeleteAuditionRoleMutationError = ErrorType<void>
+
+    /**
+ * @summary Delete an audition role (admin)
+ */
+export const useDeleteAuditionRole = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAuditionRole>>, TError,{roleId: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAuditionRole>>,
+        TError,
+        {roleId: number},
+        TContext
+      > => {
+      return useMutation(getDeleteAuditionRoleMutationOptions(options));
+    }
+
 export const getSubmitAuditionApplicationUrl = () => {
 
 

@@ -16,9 +16,11 @@ dev had renamed role rows (e.g. "최승경"), production still had legacy rows
 Name-based UI features (e.g. matching a role name to a frontend detail map) silently break
 on prod when the stored names differ.
 
-**How to apply:** For essentially-static "content" that lives in a DB table but must be
-identical across environments, make server code the source of truth: keep a canonical
-list in code for display fields and use the DB row only for the stable `id` (FK). Map
-canonical→DB row (e.g. by name substring) at read time. This fixes the live site on the
-next republish WITHOUT writing to production (the agent cannot write to prod; only SELECT).
-Do NOT delete/rewrite production rows referenced by existing applications — preserve ids.
+**How to apply:** Once content becomes admin-editable, code-as-source-of-truth at read
+time breaks (edits get overridden). The working pattern: a one-time seed/migration that
+runs at SERVER STARTUP (never inside a GET handler — a public GET must not write) and
+rewrites only exactly-matched known legacy row names to canonical content; afterwards the
+DB is the sole source of truth. Verify exact legacy names against prod via
+`executeSql({environment:"production"})` before writing the map. Never use substring
+matching (it can clobber admin-created rows); never delete/rewrite rows referenced by
+existing applications — preserve ids.

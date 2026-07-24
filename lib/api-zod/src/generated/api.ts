@@ -47,6 +47,42 @@ export const CreateAuditionRoleBody = zod.object({
 
 
 /**
+ * @summary Update an audition role (admin)
+ */
+export const UpdateAuditionRoleParams = zod.object({
+  "roleId": zod.coerce.number()
+})
+
+
+
+
+
+
+export const UpdateAuditionRoleBody = zod.object({
+  "roleName": zod.string().min(1),
+  "ageRange": zod.string().min(1),
+  "description": zod.string().min(1),
+  "status": zod.enum(['준비중', '접수중', '마감'])
+})
+
+export const UpdateAuditionRoleResponse = zod.object({
+  "id": zod.number(),
+  "roleName": zod.string(),
+  "ageRange": zod.string(),
+  "description": zod.string(),
+  "status": zod.enum(['준비중', '접수중', '마감'])
+})
+
+
+/**
+ * @summary Delete an audition role (admin)
+ */
+export const DeleteAuditionRoleParams = zod.object({
+  "roleId": zod.coerce.number()
+})
+
+
+/**
  * @summary Submit an audition application
  */
 export const SubmitAuditionApplicationBody = zod.object({

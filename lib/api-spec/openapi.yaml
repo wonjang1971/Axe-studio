@@ -65,6 +65,53 @@ paths:
         "400":
           description: Validation error
 
+  /auditions/roles/{roleId}:
+    put:
+      operationId: updateAuditionRole
+      tags: [auditions]
+      summary: Update an audition role (admin)
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuditionRoleInput"
+      responses:
+        "200":
+          description: Role updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditionRole"
+        "400":
+          description: Validation error
+        "404":
+          description: Role not found
+
+    delete:
+      operationId: deleteAuditionRole
+      tags: [auditions]
+      summary: Delete an audition role (admin)
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Role deleted
+        "404":
+          description: Role not found
+        "409":
+          description: Role has existing applications and cannot be deleted
+
   /auditions/apply:
     post:
       operationId: submitAuditionApplication
