@@ -7,9 +7,14 @@ import {
   useCreateAuditionRole,
   useUpdateAuditionRole,
   useDeleteAuditionRole,
+  useListNewsItems,
+  useCreateNewsItem,
+  useUpdateNewsItem,
+  useDeleteNewsItem,
   getListAuditionApplicationsQueryKey,
   getListAuditionRolesQueryKey,
   getListSponsorshipInquiriesQueryKey,
+  getListNewsItemsQueryKey,
   setAuthTokenGetter,
 } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -58,6 +63,24 @@ export default function AdminPage() {
     ageRange: "",
     description: "",
     status: "접수중" as "준비중" | "접수중" | "마감",
+  });
+
+  const createNewsMutation = useCreateNewsItem();
+  const updateNewsMutation = useUpdateNewsItem();
+  const deleteNewsMutation = useDeleteNewsItem();
+  const [editingNewsId, setEditingNewsId] = useState<number | null>(null);
+  const [newsForm, setNewsForm] = useState({
+    date: "",
+    category: "",
+    title: "",
+    summary: "",
+    badge: "없음" as "없음" | "신규" | "중요",
+    link: "",
+    isRecent: true,
+  });
+
+  const { data: newsItems = [] } = useListNewsItems({
+    query: { enabled: unlocked, queryKey: getListNewsItemsQueryKey() },
   });
 
   const { data: roles = [] } = useListAuditionRoles({
@@ -175,6 +198,106 @@ export default function AdminPage() {
             description: conflict
               ? "이미 접수된 지원서가 있는 배역은 삭제할 수 없습니다."
               : "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+            variant: "destructive",
+          });
+        },
+      }
+    );
+  };
+
+  const resetNewsForm = () => {
+    setEditingNewsId(null);
+    setNewsForm({
+      date: "",
+      category: "",
+      title: "",
+      summary: "",
+      badge: "없음",
+      link: "",
+      isRecent: true,
+    });
+  };
+
+  const handleSubmitNews = (event: FormEvent) => {
+    event.preventDefault();
+    if (
+      !newsForm.date.trim() ||
+      !newsForm.category.trim() ||
+      !newsForm.title.trim() ||
+      !newsForm.summary.trim()
+    ) {
+      toast({
+        title: "입력 확인",
+        description: "날짜, 분류, 제목, 내용을 모두 입력해주세요.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const data = {
+      date: newsForm.date.trim(),
+      category: newsForm.category.trim(),
+      title: newsForm.title.trim(),
+      summary: newsForm.summary.trim(),
+      badge: newsForm.badge === "없음" ? null : newsForm.badge,
+      link: newsForm.link.trim() || null,
+      isRecent: newsForm.isRecent,
+    };
+
+    const onSuccess = (action: string) => () => {
+      toast({ title: `소식 ${action} 완료`, description: `'${data.title}' 소식이 ${action}되었습니다.` });
+      resetNewsForm();
+      queryClient.invalidateQueries({ queryKey: getListNewsItemsQueryKey() });
+    };
+    const onError = (action: string) => () => {
+      toast({
+        title: `소식 ${action} 실패`,
+        description: "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        variant: "destructive",
+      });
+    };
+
+    if (editingNewsId !== null) {
+      updateNewsMutation.mutate(
+        { newsId: editingNewsId, data },
+        { onSuccess: onSuccess("수정"), onError: onError("수정") }
+      );
+      return;
+    }
+
+    createNewsMutation.mutate(
+      { data },
+      { onSuccess: onSuccess("추가"), onError: onError("추가") }
+    );
+  };
+
+  const handleEditNews = (item: (typeof newsItems)[number]) => {
+    setEditingNewsId(item.id);
+    setNewsForm({
+      date: item.date,
+      category: item.category,
+      title: item.title,
+      summary: item.summary,
+      badge: item.badge === "신규" || item.badge === "중요" ? item.badge : "없음",
+      link: item.link ?? "",
+      isRecent: item.isRecent,
+    });
+  };
+
+  const handleDeleteNews = (item: (typeof newsItems)[number]) => {
+    if (!window.confirm(`'${item.title}' 소식을 삭제할까요?`)) return;
+    deleteNewsMutation.mutate(
+      { newsId: item.id },
+      {
+        onSuccess: () => {
+          toast({ title: "소식 삭제 완료", description: `'${item.title}' 소식이 삭제되었습니다.` });
+          if (editingNewsId === item.id) resetNewsForm();
+          queryClient.invalidateQueries({ queryKey: getListNewsItemsQueryKey() });
+        },
+        onError: () => {
+          toast({
+            title: "소식 삭제 실패",
+            description: "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
             variant: "destructive",
           });
         },
@@ -432,6 +555,215 @@ export default function AdminPage() {
                             </td>
                           </tr>
                         ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
+
+              <section className="bg-card border border-border rounded-xl p-5 md:p-6">
+                <h2 className="text-2xl font-bold mb-2">
+                  {editingNewsId !== null ? "소식 수정" : "소식 추가"}
+                </h2>
+                <p className="text-sm text-muted-foreground mb-5">
+                  {editingNewsId !== null
+                    ? "아래 내용을 수정한 뒤 저장을 누르세요."
+                    : "새 소식을 추가하면 홈페이지의 최신 소식 섹션에 바로 표시됩니다."}
+                </p>
+                <form onSubmit={handleSubmitNews} className="grid gap-4 max-w-2xl">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-1.5">
+                        날짜
+                      </label>
+                      <Input
+                        value={newsForm.date}
+                        onChange={(event) =>
+                          setNewsForm((prev) => ({ ...prev, date: event.target.value }))
+                        }
+                        placeholder="예: 2026.07"
+                        data-testid="input-news-date"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-1.5">
+                        분류
+                      </label>
+                      <Input
+                        value={newsForm.category}
+                        onChange={(event) =>
+                          setNewsForm((prev) => ({ ...prev, category: event.target.value }))
+                        }
+                        placeholder="예: 오디션, 공간, 게임"
+                        data-testid="input-news-category"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-1.5">
+                      제목
+                    </label>
+                    <Input
+                      value={newsForm.title}
+                      onChange={(event) =>
+                        setNewsForm((prev) => ({ ...prev, title: event.target.value }))
+                      }
+                      placeholder="소식 제목을 입력하세요."
+                      data-testid="input-news-title"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-1.5">
+                      내용
+                    </label>
+                    <Textarea
+                      value={newsForm.summary}
+                      onChange={(event) =>
+                        setNewsForm((prev) => ({ ...prev, summary: event.target.value }))
+                      }
+                      placeholder="소식 내용을 입력하세요."
+                      rows={3}
+                      data-testid="input-news-summary"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-1.5">
+                        배지
+                      </label>
+                      <Select
+                        value={newsForm.badge}
+                        onValueChange={(value) =>
+                          setNewsForm((prev) => ({
+                            ...prev,
+                            badge: value as "없음" | "신규" | "중요",
+                          }))
+                        }
+                      >
+                        <SelectTrigger data-testid="select-news-badge">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="없음">없음</SelectItem>
+                          <SelectItem value="신규">신규</SelectItem>
+                          <SelectItem value="중요">중요</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-1.5">
+                        표시 위치
+                      </label>
+                      <Select
+                        value={newsForm.isRecent ? "recent" : "past"}
+                        onValueChange={(value) =>
+                          setNewsForm((prev) => ({ ...prev, isRecent: value === "recent" }))
+                        }
+                      >
+                        <SelectTrigger data-testid="select-news-position">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="recent">새로운 소식 (카드)</SelectItem>
+                          <SelectItem value="past">지난 소식 (더보기)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-1.5">
+                        기사 링크 (선택)
+                      </label>
+                      <Input
+                        value={newsForm.link}
+                        onChange={(event) =>
+                          setNewsForm((prev) => ({ ...prev, link: event.target.value }))
+                        }
+                        placeholder="https://..."
+                        data-testid="input-news-link"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      type="submit"
+                      disabled={createNewsMutation.isPending || updateNewsMutation.isPending}
+                      data-testid="button-submit-news"
+                    >
+                      {editingNewsId !== null
+                        ? updateNewsMutation.isPending
+                          ? "저장 중..."
+                          : "수정 저장"
+                        : createNewsMutation.isPending
+                          ? "추가 중..."
+                          : "소식 추가"}
+                    </Button>
+                    {editingNewsId !== null && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={resetNewsForm}
+                        data-testid="button-cancel-news-edit"
+                      >
+                        취소
+                      </Button>
+                    )}
+                  </div>
+                </form>
+
+                <div className="mt-8">
+                  <h3 className="text-lg font-bold mb-3">현재 소식 목록</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-border text-left text-muted-foreground">
+                          <th className="py-3 pr-4">날짜</th>
+                          <th className="py-3 pr-4">분류</th>
+                          <th className="py-3 pr-4">제목</th>
+                          <th className="py-3 pr-4">위치</th>
+                          <th className="py-3 pr-4">관리</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {newsItems.map((item) => (
+                          <tr key={item.id} className="border-b border-border/60">
+                            <td className="py-3 pr-4 whitespace-nowrap">{item.date}</td>
+                            <td className="py-3 pr-4">{item.category}</td>
+                            <td className="py-3 pr-4 font-medium">{item.title}</td>
+                            <td className="py-3 pr-4 whitespace-nowrap">
+                              {item.isRecent ? "새로운 소식" : "지난 소식"}
+                            </td>
+                            <td className="py-3 pr-4">
+                              <div className="flex gap-2">
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleEditNews(item)}
+                                  data-testid={`button-edit-news-${item.id}`}
+                                >
+                                  수정
+                                </Button>
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="destructive"
+                                  disabled={deleteNewsMutation.isPending}
+                                  onClick={() => handleDeleteNews(item)}
+                                  data-testid={`button-delete-news-${item.id}`}
+                                >
+                                  삭제
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                        {newsItems.length === 0 && (
+                          <tr>
+                            <td className="py-8 text-muted-foreground" colSpan={5}>
+                              등록된 소식이 없습니다.
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>

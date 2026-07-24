@@ -1,6 +1,7 @@
 import app from "./app";
 import { logger } from "./lib/logger";
 import { seedAndMigrateAuditionRoles } from "./routes/auditions";
+import { seedNewsItems } from "./routes/news";
 
 const rawPort = process.env["PORT"];
 
@@ -21,6 +22,12 @@ async function start() {
     await seedAndMigrateAuditionRoles();
   } catch (err) {
     logger.error({ err }, "Failed to seed/migrate audition roles");
+  }
+
+  try {
+    await seedNewsItems();
+  } catch (err) {
+    logger.error({ err }, "Failed to seed news items");
   }
 
   app.listen(port, (err) => {

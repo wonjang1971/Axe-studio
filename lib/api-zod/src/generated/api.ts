@@ -145,6 +145,85 @@ export const ListSponsorshipInquiriesResponse = zod.array(ListSponsorshipInquiri
 
 
 /**
+ * @summary List news items
+ */
+export const ListNewsItemsResponseItem = zod.object({
+  "id": zod.number(),
+  "date": zod.string(),
+  "category": zod.string(),
+  "title": zod.string(),
+  "summary": zod.string(),
+  "badge": zod.string().nullable(),
+  "link": zod.string().nullable(),
+  "isRecent": zod.boolean()
+})
+export const ListNewsItemsResponse = zod.array(ListNewsItemsResponseItem)
+
+
+/**
+ * @summary Create a news item (admin)
+ */
+
+
+
+
+
+
+export const CreateNewsItemBody = zod.object({
+  "date": zod.string().min(1),
+  "category": zod.string().min(1),
+  "title": zod.string().min(1),
+  "summary": zod.string().min(1),
+  "badge": zod.string().nullish(),
+  "link": zod.string().nullish(),
+  "isRecent": zod.boolean()
+})
+
+
+/**
+ * @summary Update a news item (admin)
+ */
+export const UpdateNewsItemParams = zod.object({
+  "newsId": zod.coerce.number()
+})
+
+
+
+
+
+
+
+export const UpdateNewsItemBody = zod.object({
+  "date": zod.string().min(1),
+  "category": zod.string().min(1),
+  "title": zod.string().min(1),
+  "summary": zod.string().min(1),
+  "badge": zod.string().nullish(),
+  "link": zod.string().nullish(),
+  "isRecent": zod.boolean()
+})
+
+export const UpdateNewsItemResponse = zod.object({
+  "id": zod.number(),
+  "date": zod.string(),
+  "category": zod.string(),
+  "title": zod.string(),
+  "summary": zod.string(),
+  "badge": zod.string().nullable(),
+  "link": zod.string().nullable(),
+  "isRecent": zod.boolean()
+})
+
+
+/**
+ * @summary Delete a news item (admin)
+ */
+export const DeleteNewsItemParams = zod.object({
+  "newsId": zod.coerce.number()
+})
+
+
+/**
  * @summary Get site summary stats
  */
 export const GetSiteStatsResponse = zod.object({

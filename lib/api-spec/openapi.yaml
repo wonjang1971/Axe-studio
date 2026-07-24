@@ -14,6 +14,8 @@ tags:
     description: Audition casting operations
   - name: sponsorships
     description: Sponsorship inquiry operations
+  - name: news
+    description: News item operations
 
 paths:
   /healthz:
@@ -183,6 +185,86 @@ paths:
                 items:
                   $ref: "#/components/schemas/SponsorshipInquiry"
 
+  /news:
+    get:
+      operationId: listNewsItems
+      tags: [news]
+      summary: List news items
+      responses:
+        "200":
+          description: List of news items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NewsItem"
+
+    post:
+      operationId: createNewsItem
+      tags: [news]
+      summary: Create a news item (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsItemInput"
+      responses:
+        "201":
+          description: News item created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsItem"
+        "400":
+          description: Validation error
+
+  /news/{newsId}:
+    put:
+      operationId: updateNewsItem
+      tags: [news]
+      summary: Update a news item (admin)
+      parameters:
+        - name: newsId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsItemInput"
+      responses:
+        "200":
+          description: News item updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsItem"
+        "400":
+          description: Validation error
+        "404":
+          description: News item not found
+
+    delete:
+      operationId: deleteNewsItem
+      tags: [news]
+      summary: Delete a news item (admin)
+      parameters:
+        - name: newsId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: News item deleted
+        "404":
+          description: News item not found
+
   /stats:
     get:
       operationId: getSiteStats
@@ -323,6 +405,50 @@ components:
           type: string
         createdAt:
           type: string
+
+    NewsItem:
+      type: object
+      required: [id, date, category, title, summary, badge, link, isRecent]
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+        category:
+          type: string
+        title:
+          type: string
+        summary:
+          type: string
+        badge:
+          type: ["string", "null"]
+        link:
+          type: ["string", "null"]
+        isRecent:
+          type: boolean
+
+    NewsItemInput:
+      type: object
+      required: [date, category, title, summary, isRecent]
+      properties:
+        date:
+          type: string
+          minLength: 1
+        category:
+          type: string
+          minLength: 1
+        title:
+          type: string
+          minLength: 1
+        summary:
+          type: string
+          minLength: 1
+        badge:
+          type: ["string", "null"]
+        link:
+          type: ["string", "null"]
+        isRecent:
+          type: boolean
 
     SiteStats:
       type: object

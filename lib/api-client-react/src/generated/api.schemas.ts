@@ -104,6 +104,35 @@ export interface SponsorshipInquiry {
   createdAt: string;
 }
 
+export interface NewsItem {
+  id: number;
+  date: string;
+  category: string;
+  title: string;
+  summary: string;
+  /** @nullable */
+  badge: string | null;
+  /** @nullable */
+  link: string | null;
+  isRecent: boolean;
+}
+
+export interface NewsItemInput {
+  /** @minLength 1 */
+  date: string;
+  /** @minLength 1 */
+  category: string;
+  /** @minLength 1 */
+  title: string;
+  /** @minLength 1 */
+  summary: string;
+  /** @nullable */
+  badge?: string | null;
+  /** @nullable */
+  link?: string | null;
+  isRecent: boolean;
+}
+
 export interface SiteStats {
   totalApplications: number;
   openRoles: number;

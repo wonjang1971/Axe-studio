@@ -13,6 +13,8 @@ export * from './auditionRoleInput';
 export * from './auditionRoleInputStatus';
 export * from './auditionRoleStatus';
 export * from './healthStatus';
+export * from './newsItem';
+export * from './newsItemInput';
 export * from './siteStats';
 export * from './sponsorshipInquiry';
 export * from './sponsorshipInquiryInput';

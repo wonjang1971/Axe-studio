@@ -4,7 +4,8 @@ export function CompanySection() {
   const companyFacts = [
     { label: "법인명", value: "주식회사 액스스튜디오 (AXE STUDIO)" },
     { label: "설립일", value: "2025년 6월 25일" },
-    { label: "소재지", value: "경기도 파주시 헤이리 예술마을" },
+    { label: "본사", value: "경기도 파주시 헤이리 예술마을" },
+    { label: "제작 프로덕션", value: "서울시 마포구 성암로 330 A동 105호" },
     { label: "주요업종", value: "방송프로그램제작 및 공급업, 영화상영업" },
     { label: "제작공간", value: "서울영상위원회 (2026년 2월 입주 선정)" },
     { label: "메인IP", value: "승경아 놀자" },
