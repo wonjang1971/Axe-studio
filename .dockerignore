@@ -1,0 +1,10 @@
+.git
+**/node_modules
+**/dist
+.pnpm-store
+attached_assets/*.zip
+*.log
+.env
+.env.*
+**/*.dump
+**/*.bak

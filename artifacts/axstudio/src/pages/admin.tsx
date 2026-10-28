@@ -32,8 +32,6 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || "axe2026";
-
 function csvEscape(value: unknown) {
   return `"${String(value ?? "").replaceAll('"', '""')}"`;
 }
@@ -305,10 +303,19 @@ export default function AdminPage() {
     );
   };
 
-  const handleLogin = (event: FormEvent) => {
+  const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
-    if (password !== ADMIN_PASSWORD) {
-      setError("관리자 비밀번호가 맞지 않습니다.");
+    try {
+      const response = await fetch("/api/admin/session", {
+        headers: { Authorization: `Bearer ${password}` },
+        cache: "no-store",
+      });
+      if (!response.ok) {
+        setError(response.status === 401 ? "관리자 비밀번호가 맞지 않습니다." : "서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.");
+        return;
+      }
+    } catch {
+      setError("서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.");
       return;
     }
     setError("");
@@ -387,7 +394,7 @@ export default function AdminPage() {
                 관리자 페이지 열기
               </Button>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                기본 임시 비밀번호는 axe2026입니다. Replit Secrets에 VITE_ADMIN_PASSWORD를 설정하면 변경할 수 있습니다.
+                관리자에게 전달받은 비밀번호를 입력해 주세요.
               </p>
             </form>
           ) : (

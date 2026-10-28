@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: axe-studio
+    runtime: docker
+    plan: 0.5c-512mb
+    region: singapore
+    branch: codex/railway-migration
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: axe-studio-db
+          property: connectionString
+      - key: ADMIN_PASSWORD
+        sync: false
+
+databases:
+  - name: axe-studio-db
+    plan: 0.1c-256mb
+    region: singapore
+    databaseName: axe_studio
+    user: axe_studio
+    diskSizeGB: 1
+    ipAllowList: []

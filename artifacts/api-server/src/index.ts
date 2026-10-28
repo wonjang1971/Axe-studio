@@ -4,6 +4,9 @@ import { seedAndMigrateAuditionRoles } from "./routes/auditions";
 import { seedNewsItems } from "./routes/news";
 
 const rawPort = process.env["PORT"];
+if (process.env.NODE_ENV === "production" && !process.env.ADMIN_PASSWORD) {
+  throw new Error("ADMIN_PASSWORD must be configured in production.");
+}
 
 if (!rawPort) {
   throw new Error(
@@ -30,7 +33,7 @@ async function start() {
     logger.error({ err }, "Failed to seed news items");
   }
 
-  app.listen(port, (err) => {
+  app.listen(port, "0.0.0.0", (err) => {
     if (err) {
       logger.error({ err }, "Error listening on port");
       process.exit(1);
